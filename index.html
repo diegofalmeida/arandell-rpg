@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>As Crônicas de Arandell — One Pager</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:  #060410;
+  --dark:   #0D0A1C;
+  --purple: #1E1040;
+  --grape:  #2D1B4E;
+  --gold:   #C9A84C;
+  --goldlt: #E2C96A;
+  --ice:    #7EB8D4;
+  --cream:  #E8E0D0;
+  --muted:  #A89880;
+}
+
+body {
+  background: var(--black);
+  color: var(--cream);
+  font-family: 'Crimson Text', serif;
+  min-height: 100vh;
+}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 92vh;
+  min-height: 560px;
+  max-height: 900px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(6,4,16,0.15) 0%,
+    rgba(6,4,16,0.1) 40%,
+    rgba(6,4,16,0.75) 72%,
+    rgba(6,4,16,1) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 0 6vw 4.5rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.hero-text {}
+
+.hero-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  opacity: 0.9;
+}
+
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 60px rgba(201,168,76,0.3), 0 2px 8px rgba(0,0,0,0.8);
+  margin-bottom: 0.3rem;
+}
+
+.hero-sub {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: var(--ice);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 400;
+  opacity: 0.9;
+  margin-bottom: 1.2rem;
+}
+
+.hero-tagline {
+  font-size: 1.15rem;
+  color: var(--cream);
+  opacity: 0.75;
+  font-style: italic;
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+.hero-badges {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 2px;
+  color: var(--gold);
+  background: rgba(201,168,76,0.08);
+}
+
+.hero-divider {
+  width: 1px;
+  height: 160px;
+  background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.4), transparent);
+  flex-shrink: 0;
+}
+
+.hero-pitch {
+  max-width: 320px;
+  flex-shrink: 0;
+}
+
+.hero-pitch-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--ice);
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  opacity: 0.8;
+}
+
+.pitch-item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  margin-bottom: 0.6rem;
+}
+
+.pitch-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+  margin-top: 0.45rem;
+}
+
+.pitch-text {
+  font-size: 0.95rem;
+  color: var(--cream);
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+/* ── SECTION WRAPPER ─────────────────────────────────────── */
+.section {
+  padding: 5rem 6vw;
+}
+
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+}
+
+.section-title span { color: var(--gold); }
+
+.gold-rule {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin-bottom: 2rem;
+}
+
+/* ── WORLD SECTION ───────────────────────────────────────── */
+.world-section {
+  background: linear-gradient(135deg, var(--dark) 0%, var(--purple) 100%);
+  border-top: 1px solid rgba(201,168,76,0.12);
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+}
+
+.world-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.world-map-wrap {
+  position: relative;
+}
+
+.world-map-img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+  box-shadow: 0 12px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,168,76,0.15);
+}
+
+.map-caption {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 0.6rem;
+}
+
+.world-desc {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--cream);
+  opacity: 0.85;
+  margin-bottom: 1.8rem;
+}
+
+.world-states {
+  display: flex;
+  gap: 0;
+}
+
+.state-item {
+  flex: 1;
+  padding: 0.9rem 1rem;
+  border-left: 2px solid;
+  background: rgba(0,0,0,0.2);
+}
+
+.state-item:first-child { border-color: var(--ice); }
+.state-item:nth-child(2) { border-color: var(--gold); }
+.state-item:last-child   { border-color: #5fb87d; }
+
+.state-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.3rem;
+}
+
+.state-item:first-child .state-name  { color: var(--ice); }
+.state-item:nth-child(2) .state-name { color: var(--gold); }
+.state-item:last-child   .state-name { color: #5fb87d; }
+
+.state-desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ── ARCHETYPES SECTION ──────────────────────────────────── */
+.archetypes-section {
+  background: var(--black);
+}
+
+.archetypes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.arch-card {
+  background: linear-gradient(160deg, rgba(30,16,64,0.6) 0%, rgba(13,10,28,0.8) 100%);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.arch-card:hover {
+  border-color: rgba(201,168,76,0.45);
+  transform: translateY(-4px);
+}
+
+.arch-portrait {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  object-position: center 10%;
+  display: block;
+}
+
+.arch-body {
+  padding: 1.1rem 1rem 1.2rem;
+}
+
+.arch-color-bar {
+  height: 2px;
+  margin-bottom: 0.9rem;
+  border-radius: 1px;
+}
+
+.arch-card:nth-child(1) .arch-color-bar { background: #9B2B2B; }
+.arch-card:nth-child(2) .arch-color-bar { background: #3B7EA1; }
+.arch-card:nth-child(3) .arch-color-bar { background: #2A6B3A; }
+.arch-card:nth-child(4) .arch-color-bar { background: #7a6933; }
+
+.arch-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.04em;
+}
+
+.arch-role {
+  font-size: 0.78rem;
+  color: var(--ice);
+  margin-bottom: 0.65rem;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.arch-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 0.8rem;
+}
+
+.arch-ability {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 3px;
+  padding: 0.28rem 0.6rem;
+  display: inline-block;
+}
+
+.arch-attr {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.arch-attr strong { color: var(--cream); }
+
+/* ── HOW IT WORKS ────────────────────────────────────────── */
+.how-section {
+  background: linear-gradient(180deg, var(--dark) 0%, var(--black) 100%);
+  border-top: 1px solid rgba(201,168,76,0.1);
+}
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin-top: 0.5rem;
+}
+
+.how-item {
+  padding: 1.5rem 1.2rem 1.5rem 0;
+  border-right: 1px solid rgba(201,168,76,0.1);
+  position: relative;
+}
+
+.how-item:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.how-number {
+  font-family: 'Cinzel', serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: rgba(201,168,76,0.12);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.how-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.how-desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* ── DICE / SYSTEM ───────────────────────────────────────── */
+.system-row {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid rgba(201,168,76,0.1);
+}
+
+.dice-block {
+  flex: 1;
+}
+
+.dice-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ice);
+  margin-bottom: 0.8rem;
+}
+
+.dice-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.dice-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.88rem;
+}
+
+.dice-row.fail    { background: rgba(139,32,32,0.2); border-left: 3px solid #8B2020; color: #d97878; }
+.dice-row.partial { background: rgba(126,184,212,0.08); border-left: 3px solid var(--ice); color: var(--ice); }
+.dice-row.success { background: rgba(95,184,125,0.12); border-left: 3px solid #5fb87d; color: #5fb87d; }
+
+.dice-row strong { font-family: 'Cinzel', serif; letter-spacing: 0.05em; }
+
+.moral-block {
+  flex: 1;
+}
+
+.moral-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.moral-item {
+  padding: 0.6rem 0.9rem;
+  border-radius: 4px;
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+.moral-item.virtue   { background: rgba(126,184,212,0.08); border-left: 3px solid var(--ice); }
+.moral-item.tentacao { background: rgba(107,79,160,0.12);  border-left: 3px solid #9b59b6; }
+
+.moral-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+.moral-item.virtue   .moral-label { color: var(--ice); }
+.moral-item.tentacao .moral-label { color: #c39bd3; }
+
+.moral-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.endings-block {
+  flex: 1;
+}
+
+.endings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+}
+
+.ending-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.88rem;
+}
+
+.ending-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ending-item:nth-child(1) .ending-dot { background: var(--gold); }
+.ending-item:nth-child(2) .ending-dot { background: var(--ice); }
+.ending-item:nth-child(3) .ending-dot { background: #5fb87d; }
+.ending-item:nth-child(4) .ending-dot { background: #9b59b6; }
+.ending-item:nth-child(5) .ending-dot { background: #8B2020; }
+
+.ending-name { color: var(--cream); font-weight: 600; }
+.ending-type { color: var(--muted); font-size: 0.78rem; font-style: italic; }
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.footer {
+  background: var(--grape);
+  border-top: 1px solid rgba(201,168,76,0.2);
+  padding: 2.5rem 6vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.footer-quote {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--goldlt);
+  opacity: 0.85;
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+.footer-quote cite {
+  display: block;
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+.footer-meta {
+  text-align: right;
+}
+
+.footer-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+
+.footer-info {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── SNOW DECORATION ─────────────────────────────────────── */
+@keyframes snow-drift {
+  0%   { transform: translateY(-10px) translateX(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.3; }
+  100% { transform: translateY(100vh) translateX(40px); opacity: 0; }
+}
+
+.snowflake {
+  position: fixed;
+  top: -10px;
+  width: 5px; height: 5px;
+  background: radial-gradient(circle, rgba(232,224,208,0.8) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: snow-drift linear infinite;
+  z-index: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══════════════════════════════════════════════ -->
+<section class="hero">
+  <img src="images/image_1.png" class="hero-img" alt="As Crônicas de Arandell">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Uma experiência narrativa completa</div>
+      <div class="hero-title">As Crônicas<br>de Arandell</div>
+      <div class="hero-sub">O Inverno das Almas</div>
+      <div class="hero-tagline">Um reino congelado pela mágica de uma rainha. Quatro viajantes. Oito sessões para mudar o destino de um mundo.</div>
+      <div class="hero-badges">
+        <span class="badge">4 Jogadores</span>
+        <span class="badge">Sem Mestre</span>
+        <span class="badge">8 Sessões</span>
+        <span class="badge">5 Finais Possíveis</span>
+        <span class="badge">App Web</span>
+      </div>
+    </div>
+
+    <div class="hero-divider"></div>
+
+    <div class="hero-pitch">
+      <div class="hero-pitch-title">O que é este jogo</div>
+      <div class="pitch-item">
+        <div class="pitch-dot"></div>
+        <div class="pitch-text">RPG narrativo cooperativo — sem necessidade de mestre ou experiência prévia</div>
+      </div>
+      <div class="pitch-item">
+        <div class="pitch-dot"></div>
+        <div class="pitch-text">Sistema de votação: toda decisão é coletiva, ninguém joga sozinho</div>
+      </div>
+      <div class="pitch-item">
+        <div class="pitch-dot"></div>
+        <div class="pitch-text">Duas forças morais — Virtude e Tentação — moldam o mundo e o final</div>
+      </div>
+      <div class="pitch-item">
+        <div class="pitch-dot"></div>
+        <div class="pitch-text">Aplicativo web gerencia tudo: narrativa, dados, NPCs e evolução</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WORLD ════════════════════════════════════════════════ -->
+<section class="section world-section">
+  <div class="world-inner">
+    <div class="world-map-wrap">
+      <img src="images/image_9.png" class="world-map-img" alt="Mapa de Arandell">
+      <div class="map-caption">Mapa do Reino de Arandell</div>
+    </div>
+    <div>
+      <div class="section-label">O Cenário</div>
+      <div class="section-title">O Reino de <span>Arandell</span></div>
+      <div class="gold-rule"></div>
+      <p class="world-desc">
+        Arandell era uma terra de luz, florestas vivas e primaveras eternas — até que a Rainha Serafina fez um pacto sombrio e congelou tudo. Décadas de inverno. Criaturas transformadas em pedra. Um leão dourado em algum lugar na floresta proibida, aguardando em silêncio.
+      </p>
+      <p class="world-desc">
+        Os jogadores chegam como estranhos — mas o destino de Arandell depende de cada escolha que fizerem. Cada decisão acumula Virtude ou Tentação. O mundo responde. O inverno sente.
+      </p>
+      <div class="world-states">
+        <div class="state-item">
+          <div class="state-name">❄ Inverno Eterno</div>
+          <div class="state-desc">Estado inicial. Neve constante, silêncio opressor.</div>
+        </div>
+        <div class="state-item">
+          <div class="state-name">⚖ Equilíbrio</div>
+          <div class="state-desc">O feitiço racha. Sinais de vida emergem.</div>
+        </div>
+        <div class="state-item">
+          <div class="state-name">🌸 Primavera</div>
+          <div class="state-desc">O inverno cede. O mundo respira de novo.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ARCHETYPES ════════════════════════════════════════ -->
+<section class="section archetypes-section">
+  <div class="section-label">Os Personagens</div>
+  <div class="section-title">Quatro Caminhos para o <span>Heroísmo</span></div>
+  <div class="gold-rule"></div>
+
+  <div class="archetypes-grid">
+
+    <div class="arch-card">
+      <img src="images/image_2.png" class="arch-portrait" alt="O Guardião">
+      <div class="arch-body">
+        <div class="arch-color-bar"></div>
+        <div class="arch-name">O Guardião</div>
+        <div class="arch-role">Protetor · Guerreiro</div>
+        <div class="arch-desc">Nasceu para defender. Quando o perigo surge, coloca o corpo entre a ameaça e os aliados — sem hesitar.</div>
+        <div class="arch-ability">⚡ Escudo Vivo</div>
+        <div class="arch-attr"><strong>Corpo 3</strong> · Mente 2 · Coração 2 · Espírito 2</div>
+      </div>
+    </div>
+
+    <div class="arch-card">
+      <img src="images/image_3.png" class="arch-portrait" alt="A Estudiosa">
+      <div class="arch-body">
+        <div class="arch-color-bar"></div>
+        <div class="arch-name">A Estudiosa</div>
+        <div class="arch-role">Sábia · Pesquisadora</div>
+        <div class="arch-desc">Curiosidade personificada. O conhecimento é seu poder — e em Arandell, saber o suficiente pode salvar todos.</div>
+        <div class="arch-ability">⚡ Memória Viva</div>
+        <div class="arch-attr">Corpo 1 · <strong>Mente 3</strong> · Coração 2 · <strong>Espírito 3</strong></div>
+      </div>
+    </div>
+
+    <div class="arch-card">
+      <img src="images/image_4.png" class="arch-portrait" alt="O Curandeiro">
+      <div class="arch-body">
+        <div class="arch-color-bar"></div>
+        <div class="arch-name">O Curandeiro</div>
+        <div class="arch-role">Empático · Sanador</div>
+        <div class="arch-desc">Sente a dor dos outros antes da própria. Sua magia não destrói — restaura o que o inverno tirou das pessoas.</div>
+        <div class="arch-ability">⚡ Toque de Esperança</div>
+        <div class="arch-attr">Corpo 2 · Mente 2 · <strong>Coração 3</strong> · Espírito 2</div>
+      </div>
+    </div>
+
+    <div class="arch-card">
+      <img src="images/image_5.png" class="arch-portrait" alt="A Visionária">
+      <div class="arch-body">
+        <div class="arch-color-bar"></div>
+        <div class="arch-name">A Visionária</div>
+        <div class="arch-role">Mística · Clarividente</div>
+        <div class="arch-desc">Percebe o que está além da realidade — futuros possíveis, verdades ocultas, o fio invisível que conecta tudo.</div>
+        <div class="arch-ability">⚡ Sexto Sentido</div>
+        <div class="arch-attr">Corpo 1 · Mente 2 · Coração 2 · <strong>Espírito 4</strong></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ══════════════════════════════════════ -->
+<section class="section how-section">
+  <div class="section-label">Como Funciona</div>
+  <div class="section-title">Regras Simples, <span>Histórias Profundas</span></div>
+  <div class="gold-rule"></div>
+
+  <div class="how-grid">
+    <div class="how-item">
+      <div class="how-number">01</div>
+      <div class="how-title">Narração</div>
+      <div class="how-desc">O app descreve o cenário com detalhes narrativos e apresenta a situação do grupo.</div>
+    </div>
+    <div class="how-item">
+      <div class="how-number">02</div>
+      <div class="how-title">Votação</div>
+      <div class="how-desc">Todos os jogadores votam na ação a ser tomada. Empate é resolvido no dado.</div>
+    </div>
+    <div class="how-item">
+      <div class="how-number">03</div>
+      <div class="how-title">Teste</div>
+      <div class="how-desc">Se a ação é arriscada, escolhem quem rola 2d6 + atributo. Aliados ajudam com +1 cada.</div>
+    </div>
+    <div class="how-item">
+      <div class="how-number">04</div>
+      <div class="how-title">Resultado</div>
+      <div class="how-desc">Sucesso, parcial ou falha — cada resultado muda a história de forma permanente.</div>
+    </div>
+    <div class="how-item">
+      <div class="how-number">05</div>
+      <div class="how-title">O Mundo</div>
+      <div class="how-desc">As consequências acumulam. Virtude e Tentação crescem. Arandell responde às escolhas.</div>
+    </div>
+  </div>
+
+  <div class="system-row">
+
+    <div class="dice-block">
+      <div class="dice-title">Sistema de Dados — 2d6 + Atributo</div>
+      <div class="dice-results">
+        <div class="dice-row fail">
+          <strong>≤ 6</strong> — Falha. A situação piora.
+        </div>
+        <div class="dice-row partial">
+          <strong>7–9</strong> — Sucesso parcial. Funciona, mas com custo.
+        </div>
+        <div class="dice-row success">
+          <strong>10+</strong> — Sucesso total. A ação funciona perfeitamente.
+        </div>
+      </div>
+    </div>
+
+    <div class="moral-block">
+      <div class="dice-title">As Duas Forças Morais</div>
+      <div class="moral-items">
+        <div class="moral-item virtue">
+          <div class="moral-label">Virtude</div>
+          <div class="moral-desc">Cresce com sacrifício, coragem e compaixão. Nível 4+ dá bônus em testes e desbloqueia finais heroicos.</div>
+        </div>
+        <div class="moral-item tentacao">
+          <div class="moral-label">Tentação</div>
+          <div class="moral-desc">Cresce ao aceitar ofertas da Rainha. Dá poder rápido — mas corrói. Nível 5 coloca o personagem à beira do abismo.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="endings-block">
+      <div class="dice-title">Os 5 Finais Possíveis</div>
+      <div class="endings-list">
+        <div class="ending-item">
+          <div class="ending-dot"></div>
+          <div>
+            <div class="ending-name">A Redenção</div>
+            <div class="ending-type">Virtude alta · Final heroico completo</div>
+          </div>
+        </div>
+        <div class="ending-item">
+          <div class="ending-dot"></div>
+          <div>
+            <div class="ending-name">O Sacrifício</div>
+            <div class="ending-type">Um herói morre · Primavera incompleta</div>
+          </div>
+        </div>
+        <div class="ending-item">
+          <div class="ending-dot"></div>
+          <div>
+            <div class="ending-name">O Equilíbrio</div>
+            <div class="ending-type">Virtude e Tentação equilibradas</div>
+          </div>
+        </div>
+        <div class="ending-item">
+          <div class="ending-dot"></div>
+          <div>
+            <div class="ending-name">A Corrupção</div>
+            <div class="ending-type">Tentação máxima · Herói vira vilão</div>
+          </div>
+        </div>
+        <div class="ending-item">
+          <div class="ending-dot"></div>
+          <div>
+            <div class="ending-name">O Fracasso</div>
+            <div class="ending-type">Inverno eterno · Fuga de Arandell</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-quote">
+    "Toda alma pode ser redimida, mas toda escolha tem um preço."
+    <cite>— As Crônicas de Arandell</cite>
+  </div>
+  <div class="footer-meta">
+    <div class="footer-title">As Crônicas de Arandell</div>
+    <div class="footer-info">
+      RPG Narrativo Cooperativo<br>
+      4 jogadores · Sem mestre · 8 sessões<br>
+      Aplicativo web incluso · 2026
+    </div>
+  </div>
+</footer>
+
+<script>
+// Snow particles
+const snowContainer = document.body;
+for (let i = 0; i < 18; i++) {
+  const s = document.createElement('div');
+  s.className = 'snowflake';
+  s.style.left = Math.random() * 100 + 'vw';
+  s.style.animationDuration = (8 + Math.random() * 12) + 's';
+  s.style.animationDelay = (Math.random() * 10) + 's';
+  s.style.width = s.style.height = (3 + Math.random() * 5) + 'px';
+  s.style.opacity = 0.3 + Math.random() * 0.5;
+  document.body.appendChild(s);
+}
+</script>
+</body>
+</html>
