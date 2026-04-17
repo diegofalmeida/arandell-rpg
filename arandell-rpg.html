@@ -2397,6 +2397,7 @@
                 nome: 'O Guardião',
                 emoji: '🛡️',
                 atributos: { corpo: 3, mente: 2, coracao: 2, espirito: 2 },
+                pontos_destino: 3,
                 habilidade: 'Escudo Vivo',
                 descricao: 'Você nasceu para defender. Quando o perigo surge, você coloca seu corpo entre aquele que precisa.'
             },
@@ -2407,6 +2408,7 @@
                 nome: 'A Estudiosa',
                 emoji: '📚',
                 atributos: { corpo: 1, mente: 3, coracao: 2, espirito: 3 },
+                pontos_destino: 2,
                 habilidade: 'Memória Viva',
                 descricao: 'Você é curiosidade personificada. Conhecimento é seu poder.'
             },
@@ -2417,6 +2419,7 @@
                 nome: 'O Curandeiro',
                 emoji: '🕊️',
                 atributos: { corpo: 2, mente: 2, coracao: 3, espirito: 2 },
+                pontos_destino: 3,
                 habilidade: 'Toque de Esperança',
                 descricao: 'Sua empatia é o seu poder. Em um mundo congelado, você é calor.'
             },
@@ -2427,6 +2430,7 @@
                 nome: 'A Visionária',
                 emoji: '✨',
                 atributos: { corpo: 1, mente: 2, coracao: 2, espirito: 4 },
+                pontos_destino: 4,
                 habilidade: 'Sexto Sentido',
                 descricao: 'Você vive com um pé em dois mundos. Conexão com o mágico e espiritual.'
             }
@@ -2560,7 +2564,7 @@ const ENDINGS_DATA = [{"id":"cena_final_01","titulo":"A Redenção","tipo":"virt
                 atributos: { ...archetype.atributos },
                 virtude: 1,
                 tentacao: 0,
-                pontos_destino: 3,
+                pontos_destino: archetype.pontos_destino,
                 estado_fisico: 'Intacto'
             };
 
