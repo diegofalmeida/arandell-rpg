@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cards de NPC — As Crônicas de Arandell</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #e8e4dc;
+  font-family: 'Inter', sans-serif;
+  padding: 1.5rem;
+}
+
+/* ─── TOOLBAR (só tela) ─── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.9rem;
+  border: 1.5px solid #999;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+.filter-btn:hover { border-color: #555; }
+.filter-btn.active { background: #333; color: white; border-color: #333; }
+.toolbar-sep { color: #bbb; font-size: 0.7rem; }
+
+@media print {
+  body { background: white; padding: 0; }
+  .toolbar { display: none; }
+  @page { size: A4 portrait; margin: 8mm; }
+}
+
+/* ─── GRID ─── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4mm;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+@media print {
+  .grid { max-width: 100%; gap: 3mm; }
+}
+
+/* ─── CARD (90×130mm) ─── */
+.npc-card {
+  width: 90mm;
+  min-height: 130mm;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  font-size: 7.5pt;
+  page-break-inside: avoid;
+  position: relative;
+  overflow: hidden;
+}
+.npc-card.hidden { display: none; }
+
+@media print {
+  .npc-card { width: 100%; min-height: 0; }
+  .npc-card.hidden { display: none !important; }
+}
+
+/* ─── CARD HEADER ─── */
+.npc-hdr {
+  border-bottom: 1.5px solid;
+  padding: 0.45rem 0.6rem 0.4rem;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+/* Quando tem retrato: layout em linha, sem padding no hdr pai */
+.npc-hdr:has(.npc-portrait-img) {
+  flex-direction: row;
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;
+}
+.npc-hdr-text {
+  padding: 0.45rem 0.6rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+  min-width: 0;
+}
+.npc-portrait-img {
+  width: 185px;
+  flex-shrink: 0;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+  border-right: 1.5px solid rgba(0,0,0,0.12);
+}
+@media print {
+  .npc-portrait-img { width: 185px; }
+}
+.npc-name {
+  font-family: 'Cinzel', serif;
+  font-size: 10pt;
+  font-weight: 700;
+  line-height: 1;
+  color: #1a1620;
+}
+.npc-role {
+  font-family: 'Crimson Text', serif;
+  font-size: 7.5pt;
+  color: #888;
+  font-style: italic;
+}
+.npc-sessions {
+  font-family: 'Inter', sans-serif;
+  font-size: 6pt;
+  letter-spacing: 0.12em;
+  color: #bbb;
+  text-transform: uppercase;
+  margin-top: 0.1rem;
+}
+
+/* ─── CARD BODY ─── */
+.npc-body {
+  flex: 1;
+  padding: 0.5rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.npc-sec {
+  font-family: 'Cinzel', serif;
+  font-size: 5.5pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 0.15rem;
+  padding-bottom: 0.1rem;
+  border-bottom: 0.5px solid #f0f0f0;
+}
+
+.npc-base {
+  font-family: 'Crimson Text', serif;
+  font-size: 8pt;
+  color: #333;
+  line-height: 1.45;
+}
+
+/* ─── ESTADOS ─── */
+.estado-list { display: flex; flex-direction: column; gap: 0.25rem; }
+.estado-item {
+  display: flex;
+  gap: 0.35rem;
+  align-items: flex-start;
+}
+.estado-flag {
+  font-family: 'Inter', sans-serif;
+  font-size: 6pt;
+  color: white;
+  padding: 0.08rem 0.3rem;
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.estado-flag.sim { background: #2A6B3A; }
+.estado-flag.nao { background: #8B2020; }
+.estado-flag.cond { background: #7a6933; }
+.estado-txt {
+  font-family: 'Crimson Text', serif;
+  font-size: 7.5pt;
+  color: #555;
+  line-height: 1.35;
+}
+
+/* ─── QUOTE ─── */
+.npc-quote {
+  border-top: 0.5px solid #eee;
+  padding-top: 0.35rem;
+  margin-top: auto;
+}
+.quote-txt {
+  font-family: 'Crimson Text', serif;
+  font-size: 8pt;
+  color: #777;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ─── CARD FOOTER ─── */
+.npc-ftr {
+  border-top: 0.75px solid #eee;
+  padding: 0.22rem 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.ftr-txt {
+  font-family: 'Cinzel', serif;
+  font-size: 5pt;
+  letter-spacing: 0.12em;
+  color: #ccc;
+  text-transform: uppercase;
+}
+
+/* ─── CUT MARKS (print only) ─── */
+@media print {
+  .npc-card::before, .npc-card::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span style="font-family:'Cinzel',serif;font-size:0.72rem;color:#888;letter-spacing:0.1em">FILTRAR POR SESSÃO:</span>
+  <button class="filter-btn active" onclick="filter('all',this)">Todos</button>
+  <button class="filter-btn" onclick="filter('1-2',this)">Sessões 1–2</button>
+  <button class="filter-btn" onclick="filter('3-4',this)">Sessões 3–4</button>
+  <button class="filter-btn" onclick="filter('5-6',this)">Sessões 5–6</button>
+  <button class="filter-btn" onclick="filter('7-8',this)">Sessões 7–8</button>
+</div>
+
+<div class="grid">
+
+  <!-- 1. FINN -->
+  <div class="npc-card" data-sessions="1,2,3,4,5,7">
+    <div class="npc-hdr" style="border-color:#2A6B3A">
+      <img src="images/image_8.png" class="npc-portrait-img" alt="Finn, o Fauno" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Finn, o Fauno</span>
+        <span class="npc-role">O Fauno Amigável · Guia</span>
+        <span class="npc-sessions">Sessões 1 – 5</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Jovem, entusiasmado e amigável, mas facilmente assustado. Leal uma vez que se sente seguro. Medo máximo: perder mais alguém.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>ajudou_finn</strong> — Totalmente devoto. Guia confiável pela floresta. Revela segredos perigosos</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥4</span>
+            <span class="estado-txt"><strong>Compaixão ≥ 4</strong> — Coragem cresce; pede para aprender com o grupo</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">"Você é o mais bravo que já conheci. Coragem não é ausência de medo — é agir apesar dele."</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#2A6B3A">● Aliado</span></div>
+  </div>
+
+  <!-- 2. NESSA -->
+  <div class="npc-card" data-sessions="1,2,3,4,5">
+    <div class="npc-hdr" style="border-color:#2A6B3A">
+      <img src="images/image_19.png" class="npc-portrait-img" alt="Nessa, a Anciã" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Nessa</span>
+        <span class="npc-role">A Anciã dos Faunos · Guardiã</span>
+        <span class="npc-sessions">Sessões 1 – 5</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Sábia, vigilante, ocasionalmente severa mas fundamentalmente materna. Cada palavra carrega peso. Não perde nada ao seu redor.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>alianca_faunos</strong> — Bênção formal dos faunos; aldeia como base</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥4</span>
+            <span class="estado-txt"><strong>Compaixão ≥ 4</strong> — Revela fraqueza específica da Rainha</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">"Conheço esse olhar. Minha filha tinha esse mesmo olhar quando a Rainha sussurrou no seu ouvido."</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#2A6B3A">● Aliada</span></div>
+  </div>
+
+  <!-- 3. SERAFINA -->
+  <div class="npc-card" data-sessions="2,3,4,5,7,8">
+    <div class="npc-hdr" style="border-color:#8B2020">
+      <img src="images/image_6.png" class="npc-portrait-img" alt="A Rainha Serafina" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Serafina</span>
+        <span class="npc-role">A Rainha do Inverno · Antagonista</span>
+        <span class="npc-sessions">Sessões 2 – 8</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Encantadora, manipuladora, nunca direta. Voz hipnótica. Crueldade abstrata — transformou Arandell em arte do sofrimento.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag nao">NÃO</span>
+            <span class="estado-txt"><strong>recusou_serafina</strong> — Respeita a recusa. Oferece desafios maiores</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥3</span>
+            <span class="estado-txt"><strong>Ambição ≥ 3</strong> — Oferece posição em seu círculo; quase amigável</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">"Bem-vindo a Arandell. Que mundo lindo que criei aqui, não acham? Tudo é tão claro sob o gelo."</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#8B2020">● Antagonista</span></div>
+  </div>
+
+  <!-- 4. ANCIÃO -->
+  <div class="npc-card" data-sessions="3,4,5,6,7,8">
+    <div class="npc-hdr" style="border-color:#7a6933">
+      <img src="images/image_7.png" class="npc-portrait-img" alt="O Ancião Eterno" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">O Ancião Eterno</span>
+        <span class="npc-role">Leão Dourado · Força Primordial</span>
+        <span class="npc-sessions">Sessões 3 – 8</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Raramente fala. Cada palavra pesa séculos. Nunca interfere demais — heróis devem ganhar sua própria vitória.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>encontrou_anciao</strong> — Revela-se gradualmente; oferece sabedoria pessoal</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥4</span>
+            <span class="estado-txt"><strong>Compaixão ≥ 4</strong> — Pode transferir parte de seu poder no final</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">"Senti sua mudança. Como raios de primavera quebrando o gelo. Continue assim."</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#7a6933">● Guia</span></div>
+  </div>
+
+  <!-- 5. BERON -->
+  <div class="npc-card" data-sessions="2,3,4,5,7">
+    <div class="npc-hdr" style="border-color:#7a6045">
+      <img src="images/image_20.png" class="npc-portrait-img" alt="Beron, o Urso" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Beron</span>
+        <span class="npc-role">O Urso Redimido · Ambíguo</span>
+        <span class="npc-sessions">Sessões 2 – 5</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Extremamente forte mas emocionalmente frágil. Culpa por atos forçados pela Rainha. Raiva é combustível e fraqueza.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>ajudou_beron</strong> — Lealdade absoluta; começa a curar emocionalmente</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥3</span>
+            <span class="estado-txt"><strong>Ambição ≥ 3</strong> — Sente a chamada da Rainha; risco de recaptura mental</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">"Sinto a chamada dela. É como cordas puxando meus ossos. Como você não tem nojo de mim?"</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#7a6045">● Ambíguo</span></div>
+  </div>
+
+  <!-- 6. THALION -->
+  <div class="npc-card" data-sessions="2,3,4,5,6">
+    <div class="npc-hdr" style="border-color:#c9a84c">
+      <img src="images/image_21.png" class="npc-portrait-img" alt="Thalion, o Cervo" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Thalion</span>
+        <span class="npc-role">Cervo Mensageiro · Arauto do Ancião</span>
+        <span class="npc-sessions">Sessões 2 – 6</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Não fala em palavras. Comunica por visões e sons silenciosos. Temperamento meditativo. Impossível ser corrompido.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>viu_thalion</strong> — Visões mais claras; anula um ataque inimigo automaticamente</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥4</span>
+            <span class="estado-txt"><strong>Compaixão ≥ 4</strong> — Revela fraqueza de Serafina; oferece sacrifício final</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">(Visão dourada: montanha coberta de flores impossíveis. Paz absoluta.)</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#c9a84c">● Aliado</span></div>
+  </div>
+
+  <!-- 7. VAEL -->
+  <div class="npc-card" data-sessions="2,3,4">
+    <div class="npc-hdr" style="border-color:#4a3570">
+      <img src="images/image_22.png" class="npc-portrait-img" alt="Conselheiro Vael" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Conselheiro Vael</span>
+        <span class="npc-role">O Servo Arrependido · Corte</span>
+        <span class="npc-sessions">Sessões 2 – 4</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Frio em público, atormentado em privado. Nunca mente diretamente — deixa verdade parecer mentira. Calculista.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>vael_desertor</strong> — Sacrifício final: desinforma a Rainha e morre por traição</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥3</span>
+            <span class="estado-txt"><strong>Ambição ≥ 3</strong> — Oferece aliança estratégica; ambos servem a Rainha</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">"Compreenda: sou obrigado a relatar esta conversa. Mas posso... reformular."</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#4a3570">● Ambíguo</span></div>
+  </div>
+
+  <!-- 8. PEQUENA LUZ -->
+  <div class="npc-card" data-sessions="3,4,5">
+    <div class="npc-hdr" style="border-color:#8e76c8">
+      <img src="images/image_23.png" class="npc-portrait-img" alt="Pequena Luz" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Pequena Luz</span>
+        <span class="npc-role">A Fada do Último Luar</span>
+        <span class="npc-sessions">Sessões 3 – 5</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Não fala — comunica por gestos, sons de sino e luz pulsante. Alegria pura apesar do frio. Aparece no limite do desespero.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>salvou_pequena_luz</strong> — Esperança Imortal: reduz DC impossível para 7 (uma vez)</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥4</span>
+            <span class="estado-txt"><strong>Ambição ≥ 4</strong> — Luz apaga completamente; nunca retorna</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">(Carrilhão delicado. Dança que comunica: "Há ainda magia aqui. Há ainda esperança.")</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#8e76c8">● Aliada</span></div>
+  </div>
+
+  <!-- 9. ALDRIC -->
+  <div class="npc-card" data-sessions="2,3,4,5">
+    <div class="npc-hdr" style="border-color:#7a4a2a">
+      <img src="images/image_24.png" class="npc-portrait-img" alt="Aldric, o Centauro" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Aldric</span>
+        <span class="npc-role">O Centauro Desconfiado · Bando Livre</span>
+        <span class="npc-sessions">Sessões 2 – 5</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Hostil a humanos. Orgulhoso. Guerreiro excepcional. Lealdade, uma vez ganha, é absoluta e inabalável.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>aldric_aliado</strong> — Proteção da guarda; treinamento de combate</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥4</span>
+            <span class="estado-txt"><strong>Ambição ≥ 4</strong> — "Sabia. Todos vocês são iguais." Tenta executar o grupo</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">"Humano. Ou pior ainda. Sua presença aqui é profanação. Dê-me razão para não derrotá-lo agora."</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#7a4a2a">● Ambíguo</span></div>
+  </div>
+
+  <!-- 10. CORVO -->
+  <div class="npc-card" data-sessions="2,3,4">
+    <div class="npc-hdr" style="border-color:#2a3240">
+      <img src="images/image_25.png" class="npc-portrait-img" alt="O Corvo Mensageiro" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">O Corvo Mensageiro</span>
+        <span class="npc-role">Espião da Rainha</span>
+        <span class="npc-sessions">Sessões 2 – 4</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Inteligente, obediente, frio. Extensão da vontade da Rainha. Registra tudo. Voz como craque de gelo.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>corvo_libertado</strong> — Aliado improvável com conhecimento perfeito dos planos da Rainha</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥3</span>
+            <span class="estado-txt"><strong>Ambição ≥ 3</strong> — Visitas mais frequentes; oportunidades sussurradas</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">"Eu vejo. Eu ouço. Eu reporto. A Rainha sabe que você chegou."</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#2a3240">● Antagonista</span></div>
+  </div>
+
+  <!-- 11. IRMÃ DO VENTO -->
+  <div class="npc-card" data-sessions="2,3,4,5">
+    <div class="npc-hdr" style="border-color:#4a8a20">
+      <img src="images/image_26.png" class="npc-portrait-img" alt="Irmã do Vento" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Irmã do Vento</span>
+        <span class="npc-role">Espírito da Floresta · Elementar</span>
+        <span class="npc-sessions">Sessões 2 – 5</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Místico, sábio, fala em metáforas. Nunca dá resposta direta — apenas dicas. Sente a floresta morrer lentamente.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>irma_protege</strong> — Passagens ocultas; nenhum inimigo pode seguir em seu domínio</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥4</span>
+            <span class="estado-txt"><strong>Ambição ≥ 4</strong> — Vento hostil; teste de Corpo DC9 para não se perder</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">(Sussurro distante.) "Buscadores de verdade vêm à floresta. Vento os guia ou os perde."</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#4a8a20">● Espírito</span></div>
+  </div>
+
+  <!-- 12. CRIANÇA DE PEDRA -->
+  <div class="npc-card" data-sessions="3,4,5">
+    <div class="npc-hdr" style="border-color:#3B7EA1">
+      <img src="images/image_27.png" class="npc-portrait-img" alt="A Criança de Pedra" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">A Criança de Pedra</span>
+        <span class="npc-role">Monumento da Perdição · Símbolo</span>
+        <span class="npc-sessions">Sessões 3 – 5</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Petrificada. Sem personalidade aparente — mas consciência presa na pedra. Grito silencioso ecoa no Espírito.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>crianca_lamentada</strong> — Bônus +1 em Espírito pelo resto da campanha</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag nao">NÃO</span>
+            <span class="estado-txt"><strong>Ignorada</strong> — Frio permanece. Moral do grupo reduzida em 1</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">(Nenhuma fala. Apenas sensação de grito eterno.)</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#3B7EA1">● Símbolo</span></div>
+  </div>
+
+  <!-- 13. BERO JOVEM -->
+  <div class="npc-card" data-sessions="3,4,5">
+    <div class="npc-hdr" style="border-color:#8a7250">
+      <img src="images/image_28.png" class="npc-portrait-img" alt="Bero, o Jovem" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Bero, o Jovem</span>
+        <span class="npc-role">Lobo da Esperança · Filhote</span>
+        <span class="npc-sessions">Sessões 3 – 5</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Tímido mas bravo. Silencioso, expressivo pelos olhos. Devoção instantânea a quem mostra bondade.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>bero_protegido</strong> — Magia dorminhoca desperta; torna-se companheiro espiritual</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥3</span>
+            <span class="estado-txt"><strong>Ambição ≥ 3</strong> — Foge aterrorizado; retorna só em necessidade extrema</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">(Latido indefeso de felicidade pura. Círculos de alegria ao redor do personagem.)</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#8a7250">● Aliado</span></div>
+  </div>
+
+  <!-- 14. MIRA -->
+  <div class="npc-card" data-sessions="2,3,4">
+    <div class="npc-hdr" style="border-color:#b87030">
+      <img src="images/image_29.png" class="npc-portrait-img" alt="Mira, a Raposa" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Mira</span>
+        <span class="npc-role">A Raposa Perspicaz · Informante</span>
+        <span class="npc-sessions">Sessões 2 – 4</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Neutra, transacional. Não ajuda por caridade — sempre há troca. Humor sarcástico. Nunca quebra palavra dada.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>mira_revelou_fraqueza</strong> — Informação crucial na batalha final</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥4</span>
+            <span class="estado-txt"><strong>Ambição ≥ 4</strong> — Vende informação falsa; teste de Mente DC8 para detectar</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">"Bem, bem. Novos jogadores no tabuleiro. Meu nome é Mira. Primeiro: qual é sua moeda?"</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#b87030">● Neutra</span></div>
+  </div>
+
+  <!-- 15. LIRA -->
+  <div class="npc-card" data-sessions="3,4,5">
+    <div class="npc-hdr" style="border-color:#6a4a9a">
+      <img src="images/image_30.png" class="npc-portrait-img" alt="Lira" onerror="this.style.display='none'">
+      <div class="npc-hdr-text">
+        <span class="npc-name">Lira</span>
+        <span class="npc-role">Criatura de Pedra e Poder · Elfa</span>
+        <span class="npc-sessions">Sessões 3 – 5</span>
+      </div>
+    </div>
+    <div class="npc-body">
+      <div>
+        <div class="npc-sec">Comportamento Base</div>
+        <div class="npc-base">Presa entre estados: carne e pedra. Oscila entre desesperada-apaixonada e fria-lógica. Transformação avança a cada dia.</div>
+      </div>
+      <div>
+        <div class="npc-sec">Flags</div>
+        <div class="estado-list">
+          <div class="estado-item">
+            <span class="estado-flag sim">SIM</span>
+            <span class="estado-txt"><strong>lira_curada</strong> — Ligação com Curandeiro; oferece braço mágico poderoso</span>
+          </div>
+          <div class="estado-item">
+            <span class="estado-flag cond">≥4</span>
+            <span class="estado-txt"><strong>Ambição ≥ 4</strong> — Rainha oferece transformação total; conflito interno devastador</span>
+          </div>
+        </div>
+      </div>
+      <div class="npc-quote">
+        <div class="quote-txt">"Não... não cheguem perto. Sou perigosa. A pedra está... está acordada."</div>
+      </div>
+    </div>
+    <div class="npc-ftr"><span class="ftr-txt">Arandell</span><span class="ftr-txt" style="color:#6a4a9a">● Ambígua</span></div>
+  </div>
+
+</div><!-- /grid -->
+
+<script>
+function filter(sess, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.npc-card').forEach(card => {
+    if (sess === 'all') { card.classList.remove('hidden'); return; }
+    const [s, e] = sess.split('-').map(Number);
+    const sessions = card.dataset.sessions.split(',').map(Number);
+    const visible = sessions.some(n => n >= s && n <= e);
+    card.classList.toggle('hidden', !visible);
+  });
+}
+</script>
+</body>
+</html>

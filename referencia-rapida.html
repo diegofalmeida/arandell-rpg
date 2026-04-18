@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Referência Rápida — As Crônicas de Arandell</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #e8e4dc;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* ── Folha A4 retrato: 210 × 297mm ── */
+.page {
+  width: 210mm;
+  height: 297mm;
+  background: white;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@media screen {
+  .page { box-shadow: 0 2px 14px rgba(0,0,0,.12); }
+}
+
+@media print {
+  body { background: white; padding: 0; }
+  .page { border: none; box-shadow: none; margin: 0; }
+  @page { size: A4 portrait; margin: 0; }
+}
+
+/* ── Linha de corte entre os dois cards ── */
+.cut-line {
+  border: none;
+  border-top: 1px dashed #ccc;
+  flex-shrink: 0;
+  position: relative;
+}
+.cut-line::before {
+  content: "✂";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 9pt;
+  color: #ccc;
+  background: white;
+  padding: 0 4px;
+}
+
+/* ── Card: metade da página A4 ──
+   210mm × ~148mm (= A5 paisagem) */
+.card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 8pt;
+  padding: 6mm 8mm;
+  min-height: 0;
+}
+
+/* ── Cabeçalho do card ── */
+.card-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid #1a1620;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.6rem;
+  flex-shrink: 0;
+}
+.card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11pt;
+  font-weight: 700;
+  color: #1a1620;
+  letter-spacing: 0.04em;
+}
+.card-sub {
+  font-family: 'Crimson Text', serif;
+  font-size: 8pt;
+  color: #888;
+  font-style: italic;
+}
+.card-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 5.5pt;
+  letter-spacing: 0.2em;
+  color: #bbb;
+  text-transform: uppercase;
+}
+
+/* ── Corpo do card: duas colunas ── */
+.card-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.col { display: flex; flex-direction: column; gap: 0.55rem; }
+.col + .col { border-left: 1px solid #f0f0f0; padding-left: 1rem; }
+
+.sec {
+  font-family: 'Cinzel', serif;
+  font-size: 5.5pt;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #aaa;
+  padding-bottom: 0.1rem;
+  border-bottom: 0.5px solid #f0f0f0;
+  margin-bottom: 0.2rem;
+}
+
+/* ── Tabela de dados ── */
+.dice-table {
+  border: 1px solid #e8e8e8;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.dice-hdr {
+  background: #1a1620;
+  color: white;
+  font-family: 'Cinzel', serif;
+  font-size: 9.5pt;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.6rem;
+  text-align: center;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.dice-row { display: flex; border-top: 1px solid #f0f0f0; }
+.dice-num {
+  padding: 0.28rem 0.7rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 9pt;
+  min-width: 46px;
+  text-align: center;
+  border-right: 1px solid #f0f0f0;
+  flex-shrink: 0;
+  align-self: center;
+}
+.dice-desc {
+  padding: 0.28rem 0.6rem;
+  font-family: 'Crimson Text', serif;
+  font-size: 8.5pt;
+  color: #333;
+  line-height: 1.35;
+  flex: 1;
+}
+.fail { color: #8B2020; } .partial { color: #3B7EA1; } .success { color: #2A6B3A; }
+
+/* ── Listas de atributos / regras ── */
+.attr-list { display: flex; flex-direction: column; gap: 0.22rem; }
+.attr-row { display: flex; align-items: baseline; gap: 0.4rem; }
+.attr-name { font-family: 'Cinzel', serif; font-size: 7.5pt; font-weight: 700; min-width: 52px; color: #222; }
+.attr-desc { font-family: 'Crimson Text', serif; font-size: 8pt; color: #666; line-height: 1.3; }
+
+.rule-list { display: flex; flex-direction: column; gap: 0.22rem; }
+.rule-item { display: flex; gap: 0.38rem; align-items: flex-start; }
+.bullet { width: 5px; height: 5px; border-radius: 50%; margin-top: 0.3rem; flex-shrink: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.bv { background: #2A6B3A; } .bt { background: #8B2020; } .bn { background: #999; } .bg { background: #8a7230; }
+.rule-txt { font-family: 'Crimson Text', serif; font-size: 8pt; color: #444; line-height: 1.4; }
+.rule-txt strong { color: #1a1620; }
+
+/* ── Escalas ── */
+.scale { display: flex; flex-direction: column; gap: 0.18rem; }
+.scale-row { display: grid; grid-template-columns: 14px 1fr; align-items: center; gap: 0.35rem; }
+.scale-num { font-family: 'Cinzel', serif; font-size: 7pt; font-weight: 700; color: #aaa; text-align: center; }
+.scale-bar { height: 8px; border-radius: 2px; border: 0.75px solid #eee; position: relative; overflow: hidden; }
+.scale-fill { position: absolute; top: 0; left: 0; bottom: 0; border-radius: 2px; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.scale-lbl { font-family: 'Crimson Text', serif; font-size: 7.5pt; color: #555; line-height: 1.25; }
+
+/* ── Caixa de objetivo ── */
+.obj-box { border: 1.5px solid #1a1620; border-radius: 3px; padding: 0.45rem 0.65rem; text-align: center; }
+.obj-lbl { font-family: 'Cinzel', serif; font-size: 5.5pt; letter-spacing: 0.2em; text-transform: uppercase; color: #aaa; margin-bottom: 0.15rem; }
+.obj-txt { font-family: 'Crimson Text', serif; font-size: 9pt; color: #1a1620; font-style: italic; line-height: 1.4; }
+
+/* ── Rodapé do card ── */
+.card-ftr {
+  border-top: 0.75px solid #f0f0f0;
+  padding-top: 0.25rem;
+  margin-top: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.ftr-txt { font-family: 'Cinzel', serif; font-size: 5pt; letter-spacing: 0.15em; color: #ccc; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══════════════ CARD 1 — FRENTE ═══════════════ -->
+  <div class="card">
+    <div class="card-hdr">
+      <div>
+        <div class="card-title">Referência Rápida</div>
+        <div class="card-sub">Sistema de Jogo</div>
+      </div>
+      <div class="card-tag">As Crônicas de Arandell · O Inverno das Almas</div>
+    </div>
+
+    <div class="card-body">
+
+      <!-- COL 1 -->
+      <div class="col">
+        <div>
+          <div class="sec">Teste de Ação</div>
+          <div class="dice-table">
+            <div class="dice-hdr">2d6 + Atributo</div>
+            <div class="dice-row">
+              <div class="dice-num fail">6—</div>
+              <div class="dice-desc"><strong class="fail">Falha</strong> — Consequência negativa. O app narra o resultado e avança.</div>
+            </div>
+            <div class="dice-row">
+              <div class="dice-num partial">7–9</div>
+              <div class="dice-desc"><strong class="partial">Parcial</strong> — Sucesso com custo ou complicação imposta.</div>
+            </div>
+            <div class="dice-row">
+              <div class="dice-num success">10+</div>
+              <div class="dice-desc"><strong class="success">Sucesso</strong> — Resultado positivo, sem complicações adicionais.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec">Atributos</div>
+          <div class="attr-list">
+            <div class="attr-row"><span class="attr-name">Corpo</span><span class="attr-desc">Força, resistência e ação física</span></div>
+            <div class="attr-row"><span class="attr-name">Mente</span><span class="attr-desc">Análise, estratégia e conhecimento</span></div>
+            <div class="attr-row"><span class="attr-name">Coração</span><span class="attr-desc">Empatia, persuasão e conexões</span></div>
+            <div class="attr-row"><span class="attr-name">Espírito</span><span class="attr-desc">Fé, intuição e resistência moral</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 2 -->
+      <div class="col">
+        <div>
+          <div class="sec" style="color:#4a9a4a">Eixos de Identidade (C/A/V)</div>
+          <div class="rule-list">
+            <div class="rule-item"><div class="bullet" style="background:#4a9a4a"></div><span class="rule-txt"><strong>Compaixão</strong> — salvar, perdoar, curar, lamentar</span></div>
+            <div class="rule-item"><div class="bullet" style="background:#9a4a4a"></div><span class="rule-txt"><strong>Ambição</strong> — poder, atalhos, controle, ganho pessoal</span></div>
+            <div class="rule-item"><div class="bullet" style="background:#4a6a9a"></div><span class="rule-txt"><strong>Vínculo</strong> — lealdade, laços com NPCs, sacrifício pelo grupo</span></div>
+            <div class="rule-item"><div class="bullet bn"></div><span class="rule-txt">Decisões movem 1–3 eixos simultaneamente</span></div>
+            <div class="rule-item"><div class="bullet bn"></div><span class="rule-txt">Caminho (Resistência/Equilíbrio/Corrupção) é definido na Sessão 4</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec" style="color:#7eb8d4">Estado do Mundo</div>
+          <div class="rule-list">
+            <div class="rule-item"><div class="bullet" style="background:#4a6a9a"></div><span class="rule-txt">🌡️ <strong>Calor</strong> — 0=inverno eterno · 5=primavera plena</span></div>
+            <div class="rule-item"><div class="bullet" style="background:#ffd76a"></div><span class="rule-txt">✨ <strong>Esperança</strong> — 0=NPCs desistem · 5=resistência ativa</span></div>
+            <div class="rule-item"><div class="bullet" style="background:#c44"></div><span class="rule-txt">👁 <strong>Controle da Rainha</strong> — 0=enfraquecida · 5=domínio total</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec" style="color:#2A6B3A">Virtude / Tentação (recurso)</div>
+          <div class="rule-list">
+            <div class="rule-item"><div class="bullet bv"></div><span class="rule-txt">Gaste 1 Virtude para <strong>rolar de novo</strong> qualquer teste</span></div>
+            <div class="rule-item"><div class="bullet bt"></div><span class="rule-txt">Gaste 1 Tentação para <strong>+2 em qualquer teste</strong> (custo: a Rainha percebe)</span></div>
+            <div class="rule-item"><div class="bullet bn"></div><span class="rule-txt">Pontos só como recurso gastável — identidade é medida pelos eixos C/A/V acima</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card-ftr">
+      <span class="ftr-txt">As Crônicas de Arandell: O Inverno das Almas</span>
+      <span class="ftr-txt">Frente — Imprimir dos dois lados e recortar</span>
+    </div>
+  </div>
+
+  <hr class="cut-line">
+
+  <!-- ═══════════════ CARD 2 — VERSO ═══════════════ -->
+  <div class="card">
+    <div class="card-hdr">
+      <div>
+        <div class="card-title">Referência Rápida</div>
+        <div class="card-sub">Eixos de Identidade, Mundo &amp; Pontos de Destino</div>
+      </div>
+      <div class="card-tag">As Crônicas de Arandell · O Inverno das Almas</div>
+    </div>
+
+    <div class="card-body">
+
+      <!-- COL 1: Escalas -->
+      <div class="col">
+        <div>
+          <div class="sec" style="color:#2A6B3A">Escala de Virtude (0 → 5)</div>
+          <div class="scale">
+            <div class="scale-row"><span class="scale-num">1</span><div><div class="scale-bar"><div class="scale-fill" style="width:20%;background:#c8e6c9"></div></div><span class="scale-lbl">O grupo confia nas suas decisões</span></div></div>
+            <div class="scale-row"><span class="scale-num">2</span><div><div class="scale-bar"><div class="scale-fill" style="width:40%;background:#a5d6a7"></div></div><span class="scale-lbl">Aliados respondem melhor a você</span></div></div>
+            <div class="scale-row"><span class="scale-num">3</span><div><div class="scale-bar"><div class="scale-fill" style="width:60%;background:#66bb6a"></div></div><span class="scale-lbl">Pode inspirar aliados gastando 1 Virtude</span></div></div>
+            <div class="scale-row"><span class="scale-num">4</span><div><div class="scale-bar"><div class="scale-fill" style="width:80%;background:#43a047"></div></div><span class="scale-lbl">O Ancião aparece espontaneamente</span></div></div>
+            <div class="scale-row"><span class="scale-num">5</span><div><div class="scale-bar"><div class="scale-fill" style="width:100%;background:#2A6B3A"></div></div><span class="scale-lbl" style="color:#2A6B3A"><strong>Desbloqueia o Final de Redenção</strong></span></div></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec" style="color:#8B2020">Escala de Tentação (0 → 5)</div>
+          <div class="scale">
+            <div class="scale-row"><span class="scale-num">1</span><div><div class="scale-bar"><div class="scale-fill" style="width:20%;background:#ffcdd2"></div></div><span class="scale-lbl">Comportamento sutilmente diferente</span></div></div>
+            <div class="scale-row"><span class="scale-num">2</span><div><div class="scale-bar"><div class="scale-fill" style="width:40%;background:#ef9a9a"></div></div><span class="scale-lbl">A Rainha sabe exatamente onde você está</span></div></div>
+            <div class="scale-row"><span class="scale-num">3</span><div><div class="scale-bar"><div class="scale-fill" style="width:60%;background:#e57373"></div></div><span class="scale-lbl">Personagem muda — notar na interpretação</span></div></div>
+            <div class="scale-row"><span class="scale-num">4</span><div><div class="scale-bar"><div class="scale-fill" style="width:80%;background:#c62828"></div></div><span class="scale-lbl">Guardas de gelo param de atacar você</span></div></div>
+            <div class="scale-row"><span class="scale-num">5</span><div><div class="scale-bar"><div class="scale-fill" style="width:100%;background:#8B2020"></div></div><span class="scale-lbl" style="color:#8B2020"><strong>Personagem perdido para a Rainha</strong></span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 2: Destino + Habilidades + Objetivo -->
+      <div class="col">
+        <div>
+          <div class="sec">Pontos de Destino</div>
+          <div class="rule-list">
+            <div class="rule-item"><div class="bullet bg"></div><span class="rule-txt">Guardião ★★★ · Estudiosa ★★ · Curandeiro ★★★ · Visionária ★★★★</span></div>
+            <div class="rule-item"><div class="bullet bg"></div><span class="rule-txt">Gaste 1 para <strong>rolar de novo</strong> sem custo de Virtude</span></div>
+            <div class="rule-item"><div class="bullet bg"></div><span class="rule-txt">Gaste 1 para <strong>evitar uma consequência fatal</strong></span></div>
+            <div class="rule-item"><div class="bullet bg"></div><span class="rule-txt">Não se recuperam entre sessões — use com cuidado</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec">Habilidades Especiais</div>
+          <div class="rule-list">
+            <div class="rule-item"><div class="bullet" style="background:#9B2B2B"></div><span class="rule-txt"><strong>Guardião:</strong> Escudo Vivo — absorve dano de aliado (1×/sessão)</span></div>
+            <div class="rule-item"><div class="bullet" style="background:#3B7EA1"></div><span class="rule-txt"><strong>Estudiosa:</strong> Memória Viva — info via Mente (1×/cena)</span></div>
+            <div class="rule-item"><div class="bullet" style="background:#2A6B3A"></div><span class="rule-txt"><strong>Curandeiro:</strong> Toque de Esperança — melhora estado de aliado (1×/cena)</span></div>
+            <div class="rule-item"><div class="bullet" style="background:#7a6933"></div><span class="rule-txt"><strong>Visionária:</strong> Sexto Sentido — percebe oculto via Espírito (1×/cena)</span></div>
+          </div>
+        </div>
+
+        <div class="obj-box">
+          <div class="obj-lbl">Objetivo da Campanha</div>
+          <div class="obj-txt">"Quebrar o feitiço de Serafina.<br>Todos voltam para casa."</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card-ftr">
+      <span class="ftr-txt">As Crônicas de Arandell: O Inverno das Almas</span>
+      <span class="ftr-txt">Verso — Recortar na linha tracejada acima</span>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
