@@ -3,723 +3,729 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>As Crônicas de Arandell — One Pager</title>
+<title>As Crônicas de Arandell — O Inverno das Almas</title>
+<meta name="description" content="RPG narrativo cooperativo para 4 jogadores. 8 sessões, 3 caminhos irreversíveis, 9 finais possíveis. Sem mestre — o aplicativo gerencia tudo.">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --black:  #060410;
-  --dark:   #0D0A1C;
-  --purple: #1E1040;
-  --grape:  #2D1B4E;
-  --gold:   #C9A84C;
-  --goldlt: #E2C96A;
-  --ice:    #7EB8D4;
-  --cream:  #E8E0D0;
-  --muted:  #A89880;
+  --black:    #060410;
+  --dark:     #0D0A1C;
+  --purple:   #1E1040;
+  --grape:    #2D1B4E;
+  --gold:     #C9A84C;
+  --goldlt:   #E2C96A;
+  --ice:      #7EB8D4;
+  --cream:    #E8E0D0;
+  --muted:    #A89880;
+  --comp:     #4a9a4a;
+  --amb:      #9a4a4a;
+  --vinc:     #4a6a9a;
+  --resist:   #4a9a4a;
+  --equil:    #b89a4a;
+  --corrup:   #8e76c8;
 }
 
+html { scroll-behavior: smooth; }
 body {
   background: var(--black);
   color: var(--cream);
   font-family: 'Crimson Text', serif;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* ── HERO ─────────────────────────────────────────────────── */
+a { color: inherit; text-decoration: none; }
+
+/* ── SNOWFLAKES (ambiente) ──────────────────────────────── */
+.snowflake {
+  position: fixed;
+  top: -10px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  animation: fall linear infinite;
+  box-shadow: 0 0 4px rgba(255,255,255,0.5);
+}
+@keyframes fall {
+  0%   { transform: translateY(0) rotate(0); }
+  100% { transform: translateY(110vh) rotate(360deg); }
+}
+
+/* ── HERO ───────────────────────────────────────────────── */
 .hero {
   position: relative;
   width: 100%;
-  height: 92vh;
-  min-height: 560px;
-  max-height: 900px;
+  min-height: 100vh;
   overflow: hidden;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
 }
-
 .hero-img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 30%;
-  display: block;
+  object-position: center 25%;
+  z-index: 0;
 }
-
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(6,4,16,0.15) 0%,
-    rgba(6,4,16,0.1) 40%,
-    rgba(6,4,16,0.75) 72%,
-    rgba(6,4,16,1) 100%
-  );
+  background: linear-gradient(to bottom,
+    rgba(6,4,16,0.25) 0%,
+    rgba(6,4,16,0.15) 35%,
+    rgba(6,4,16,0.82) 75%,
+    rgba(6,4,16,1) 100%);
+  z-index: 1;
 }
-
-.hero-content {
+.hero-inner {
   position: relative;
   z-index: 2;
-  width: 100%;
-  padding: 0 6vw 4.5rem;
+  flex: 1;
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 5rem 6vw 3.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
-
-.hero-text {}
-
 .hero-eyebrow {
   font-family: 'Cinzel', serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.35em;
+  font-size: 0.74rem;
+  letter-spacing: 0.38em;
   color: var(--gold);
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
-  opacity: 0.9;
-}
-
-.hero-title {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(2.8rem, 6vw, 5.5rem);
-  font-weight: 900;
-  color: var(--gold);
-  line-height: 1;
-  letter-spacing: 0.04em;
-  text-shadow: 0 0 60px rgba(201,168,76,0.3), 0 2px 8px rgba(0,0,0,0.8);
-  margin-bottom: 0.3rem;
-}
-
-.hero-sub {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  color: var(--ice);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  font-weight: 400;
-  opacity: 0.9;
-  margin-bottom: 1.2rem;
-}
-
-.hero-tagline {
-  font-size: 1.15rem;
-  color: var(--cream);
-  opacity: 0.75;
-  font-style: italic;
-  max-width: 480px;
-  line-height: 1.6;
-}
-
-.hero-badges {
-  display: flex;
-  gap: 0.6rem;
-  margin-top: 1.4rem;
-  flex-wrap: wrap;
-}
-
-.badge {
-  font-family: 'Cinzel', serif;
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 0.3rem 0.8rem;
-  border: 1px solid rgba(201,168,76,0.4);
-  border-radius: 2px;
-  color: var(--gold);
-  background: rgba(201,168,76,0.08);
-}
-
-.hero-divider {
-  width: 1px;
-  height: 160px;
-  background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.4), transparent);
-  flex-shrink: 0;
-}
-
-.hero-pitch {
-  max-width: 320px;
-  flex-shrink: 0;
-}
-
-.hero-pitch-title {
-  font-family: 'Cinzel', serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.2em;
-  color: var(--ice);
   text-transform: uppercase;
   margin-bottom: 0.8rem;
-  opacity: 0.8;
+  opacity: 0.9;
 }
-
-.pitch-item {
-  display: flex;
-  gap: 0.6rem;
-  align-items: flex-start;
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.6rem, 7vw, 5.8rem);
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 0.95;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 80px rgba(201,168,76,0.4), 0 2px 12px rgba(0,0,0,0.9);
   margin-bottom: 0.6rem;
 }
-
-.pitch-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--gold);
-  flex-shrink: 0;
-  margin-top: 0.45rem;
+.hero-sub {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.1rem, 2.2vw, 1.7rem);
+  color: var(--ice);
+  letter-spacing: 0.2em;
+  margin-bottom: 1.8rem;
+  text-transform: uppercase;
+  opacity: 0.85;
 }
-
-.pitch-text {
-  font-size: 0.95rem;
+.hero-tagline {
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  line-height: 1.65;
   color: var(--cream);
-  opacity: 0.8;
-  line-height: 1.5;
+  max-width: 620px;
+  margin-bottom: 2rem;
+  font-style: italic;
+  opacity: 0.95;
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 2.5rem;
+}
+.badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid rgba(201,168,76,0.35);
+  border-radius: 2px;
+  color: var(--gold);
+  background: rgba(6,4,16,0.4);
+  backdrop-filter: blur(4px);
 }
 
-/* ── SECTION WRAPPER ─────────────────────────────────────── */
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 1.05rem 2.4rem;
+  background: linear-gradient(135deg, var(--gold), var(--goldlt));
+  color: var(--black);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 6px 24px rgba(201,168,76,0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(201,168,76,0.45);
+}
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.95rem 1.8rem;
+  background: transparent;
+  color: var(--cream);
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201,168,76,0.07);
+}
+.btn-arrow {
+  display: inline-block;
+  transition: transform 0.18s ease;
+}
+.btn-primary:hover .btn-arrow,
+.btn-secondary:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* ── SECTION BASE ──────────────────────────────────────── */
 .section {
-  padding: 5rem 6vw;
+  position: relative;
+  padding: 5.5rem 6vw;
+  max-width: 1320px;
+  margin: 0 auto;
+  z-index: 2;
 }
-
 .section-label {
   font-family: 'Cinzel', serif;
-  font-size: 0.65rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
   color: var(--gold);
-  margin-bottom: 0.5rem;
-  opacity: 0.7;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  opacity: 0.85;
 }
-
 .section-title {
   font-family: 'Cinzel', serif;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: clamp(1.8rem, 3.6vw, 2.8rem);
   font-weight: 700;
   color: var(--cream);
-  margin-bottom: 0.4rem;
-  line-height: 1.2;
+  line-height: 1.15;
+  margin-bottom: 1.4rem;
+  letter-spacing: 0.02em;
 }
-
-.section-title span { color: var(--gold); }
-
+.section-title span {
+  color: var(--gold);
+  font-style: italic;
+}
 .gold-rule {
   width: 60px;
   height: 2px;
   background: linear-gradient(90deg, var(--gold), transparent);
   margin-bottom: 2rem;
 }
-
-/* ── WORLD SECTION ───────────────────────────────────────── */
-.world-section {
-  background: linear-gradient(135deg, var(--dark) 0%, var(--purple) 100%);
-  border-top: 1px solid rgba(201,168,76,0.12);
-  border-bottom: 1px solid rgba(201,168,76,0.12);
+.section-lead {
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: var(--cream);
+  max-width: 720px;
+  margin-bottom: 2.5rem;
+  opacity: 0.9;
 }
 
-.world-inner {
+/* ── STORY HOOK ─────────────────────────────────────────── */
+.story-section {
+  background: linear-gradient(180deg, var(--black), var(--dark));
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+}
+.quote-block {
+  max-width: 820px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  padding: 2rem;
+}
+.quote-block::before,
+.quote-block::after {
+  content: '◆';
+  color: var(--gold);
+  opacity: 0.35;
+  font-size: 0.9rem;
+  display: block;
+  margin: 0.8rem auto;
+}
+.quote-text {
+  font-family: 'Crimson Text', serif;
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  line-height: 1.7;
+  color: var(--cream);
+  margin: 1rem 0;
+}
+.quote-attrib {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 1.2rem;
+}
+
+/* ── PILLARS (3 sistemas) ──────────────────────────────── */
+.pillars-section { background: var(--black); }
+.pillars-grid {
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  gap: 4rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.pillar {
+  padding: 2rem 1.6rem;
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(13,10,28,0.7), rgba(6,4,16,0.9));
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.pillar:hover {
+  border-color: rgba(201,168,76,0.4);
+  transform: translateY(-4px);
+}
+.pillar-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+.pillar-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.9rem;
+  color: var(--gold);
+}
+.pillar-desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--cream);
+  opacity: 0.88;
+  margin-bottom: 1.2rem;
+}
+.pillar-axes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(201,168,76,0.15);
+}
+.axis-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+}
+.axis-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0;
+}
+.axis-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.axis-desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ── WORLD ─────────────────────────────────────────────── */
+.world-section {
+  background: linear-gradient(180deg, var(--dark), var(--grape) 80%, var(--dark));
+}
+.world-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 3.5rem;
   align-items: center;
 }
-
 .world-map-wrap {
   position: relative;
 }
-
 .world-map-img {
   width: 100%;
-  border-radius: 8px;
-  display: block;
-  box-shadow: 0 12px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,168,76,0.15);
+  border-radius: 6px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,168,76,0.25);
 }
-
 .map-caption {
   font-family: 'Cinzel', serif;
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--muted);
-  text-align: center;
-  margin-top: 0.6rem;
 }
+.world-desc { font-size: 1.05rem; line-height: 1.8; margin-bottom: 1.2rem; opacity: 0.95; }
 
-.world-desc {
-  font-size: 1.1rem;
-  line-height: 1.75;
-  color: var(--cream);
-  opacity: 0.85;
-  margin-bottom: 1.8rem;
-}
-
-.world-states {
-  display: flex;
-  gap: 0;
-}
-
-.state-item {
-  flex: 1;
-  padding: 0.9rem 1rem;
-  border-left: 2px solid;
-  background: rgba(0,0,0,0.2);
-}
-
-.state-item:first-child { border-color: var(--ice); }
-.state-item:nth-child(2) { border-color: var(--gold); }
-.state-item:last-child   { border-color: #5fb87d; }
-
-.state-name {
-  font-family: 'Cinzel', serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.3rem;
-}
-
-.state-item:first-child .state-name  { color: var(--ice); }
-.state-item:nth-child(2) .state-name { color: var(--gold); }
-.state-item:last-child   .state-name { color: #5fb87d; }
-
-.state-desc {
-  font-size: 0.8rem;
-  color: var(--muted);
-  line-height: 1.4;
-}
-
-/* ── ARCHETYPES SECTION ──────────────────────────────────── */
+/* ── ARCHETYPES ─────────────────────────────────────────── */
 .archetypes-section {
   background: var(--black);
+  text-align: center;
 }
-
 .archetypes-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+  gap: 1.2rem;
+  margin-top: 1rem;
 }
-
 .arch-card {
-  background: linear-gradient(160deg, rgba(30,16,64,0.6) 0%, rgba(13,10,28,0.8) 100%);
+  background: linear-gradient(180deg, rgba(13,10,28,0.8), rgba(6,4,16,0.95));
   border: 1px solid rgba(201,168,76,0.15);
-  border-radius: 8px;
+  border-radius: 4px;
   overflow: hidden;
-  transition: border-color 0.3s, transform 0.3s;
+  transition: transform 0.22s ease, border-color 0.22s ease;
+  text-align: left;
 }
-
 .arch-card:hover {
-  border-color: rgba(201,168,76,0.45);
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+  border-color: rgba(201,168,76,0.5);
 }
-
 .arch-portrait {
   width: 100%;
-  aspect-ratio: 2/3;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
-  object-position: center 10%;
+  object-position: center 20%;
   display: block;
+  filter: contrast(1.05);
 }
-
-.arch-body {
-  padding: 1.1rem 1rem 1.2rem;
-}
-
+.arch-body { padding: 1.2rem 1.3rem 1.4rem; }
 .arch-color-bar {
+  width: 36px;
   height: 2px;
-  margin-bottom: 0.9rem;
-  border-radius: 1px;
+  background: var(--gold);
+  margin-bottom: 0.7rem;
 }
-
-.arch-card:nth-child(1) .arch-color-bar { background: #9B2B2B; }
-.arch-card:nth-child(2) .arch-color-bar { background: #3B7EA1; }
-.arch-card:nth-child(3) .arch-color-bar { background: #2A6B3A; }
-.arch-card:nth-child(4) .arch-color-bar { background: #7a6933; }
-
 .arch-name {
   font-family: 'Cinzel', serif;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--gold);
   margin-bottom: 0.2rem;
-  letter-spacing: 0.04em;
 }
-
 .arch-role {
   font-size: 0.78rem;
-  color: var(--ice);
-  margin-bottom: 0.65rem;
   font-style: italic;
-  opacity: 0.85;
+  color: var(--ice);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.04em;
 }
-
 .arch-desc {
   font-size: 0.88rem;
-  color: var(--muted);
   line-height: 1.55;
-  margin-bottom: 0.8rem;
+  color: var(--cream);
+  opacity: 0.9;
+  margin-bottom: 0.9rem;
+  min-height: 4.2em;
 }
-
 .arch-ability {
   font-family: 'Cinzel', serif;
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--cream);
-  background: rgba(201,168,76,0.1);
-  border: 1px solid rgba(201,168,76,0.25);
-  border-radius: 3px;
-  padding: 0.28rem 0.6rem;
-  display: inline-block;
+  color: var(--gold);
+  padding: 0.4rem 0;
+  border-top: 1px solid rgba(201,168,76,0.2);
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+  margin-bottom: 0.7rem;
 }
-
 .arch-attr {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: var(--muted);
-  margin-top: 0.5rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
 }
-
 .arch-attr strong { color: var(--cream); }
 
-/* ── HOW IT WORKS ────────────────────────────────────────── */
-.how-section {
-  background: linear-gradient(180deg, var(--dark) 0%, var(--black) 100%);
-  border-top: 1px solid rgba(201,168,76,0.1);
+/* ── PATHS + ENDINGS ───────────────────────────────────── */
+.paths-section {
+  background: linear-gradient(180deg, var(--dark), var(--black));
 }
+.paths-lead {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.paths-flow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+  margin-top: 2rem;
+}
+.path-card {
+  padding: 1.8rem 1.5rem 1.4rem;
+  background: rgba(13,10,28,0.7);
+  border-radius: 6px;
+  border: 1px solid;
+}
+.path-card.resistencia { border-color: rgba(74,154,74,0.45);  background: linear-gradient(180deg, rgba(74,154,74,0.08), rgba(13,10,28,0.8)); }
+.path-card.equilibrio  { border-color: rgba(184,154,74,0.45); background: linear-gradient(180deg, rgba(184,154,74,0.08), rgba(13,10,28,0.8)); }
+.path-card.corrupcao   { border-color: rgba(142,118,200,0.45);background: linear-gradient(180deg, rgba(142,118,200,0.1), rgba(13,10,28,0.8)); }
+.path-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+.path-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.path-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.path-resistencia .path-name, .path-resistencia .path-icon { color: var(--resist); }
+.path-equilibrio  .path-name, .path-equilibrio  .path-icon { color: var(--equil); }
+.path-corrupcao   .path-name, .path-corrupcao   .path-icon { color: var(--corrup); }
+.path-intro {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--cream);
+  margin-bottom: 1.2rem;
+  opacity: 0.9;
+  font-style: italic;
+}
+.path-endings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(201,168,76,0.15);
+}
+.ending-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+.ending-row strong {
+  color: var(--cream);
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  display: block;
+  margin-bottom: 0.15rem;
+}
+.ending-row span { color: var(--muted); font-size: 0.8rem; }
 
+/* ── DICE ROW ──────────────────────────────────────────── */
+.dice-section { background: var(--black); }
+.dice-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.dice-card {
+  padding: 1.4rem;
+  border-radius: 4px;
+  border-left: 4px solid;
+  background: rgba(13,10,28,0.7);
+}
+.dice-card.fail    { border-color: #c44; }
+.dice-card.partial { border-color: var(--gold); }
+.dice-card.success { border-color: var(--resist); }
+.dice-roll {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.dice-card.fail    .dice-roll { color: #c44; }
+.dice-card.partial .dice-roll { color: var(--gold); }
+.dice-card.success .dice-roll { color: var(--resist); }
+.dice-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.dice-desc { font-size: 0.88rem; line-height: 1.55; color: var(--cream); opacity: 0.9; }
+
+/* ── HOW IT WORKS ──────────────────────────────────────── */
+.how-section { background: linear-gradient(180deg, var(--black), var(--dark)); }
 .how-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 4px;
+  overflow: hidden;
 }
-
 .how-item {
-  padding: 1.5rem 1.2rem 1.5rem 0;
-  border-right: 1px solid rgba(201,168,76,0.1);
-  position: relative;
+  padding: 2rem 1.3rem;
+  border-right: 1px solid rgba(201,168,76,0.12);
+  transition: background 0.2s ease;
 }
-
-.how-item:last-child {
-  border-right: none;
-  padding-right: 0;
-}
-
+.how-item:last-child { border-right: none; }
+.how-item:hover { background: rgba(201,168,76,0.04); }
 .how-number {
   font-family: 'Cinzel', serif;
-  font-size: 2.2rem;
-  font-weight: 900;
-  color: rgba(201,168,76,0.12);
-  line-height: 1;
-  margin-bottom: 0.3rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 0.7rem;
 }
-
 .how-title {
   font-family: 'Cinzel', serif;
-  font-size: 0.78rem;
-  color: var(--gold);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.6rem;
 }
+.how-desc { font-size: 0.84rem; line-height: 1.55; color: var(--cream); opacity: 0.85; }
 
-.how-desc {
-  font-size: 0.9rem;
-  color: var(--muted);
-  line-height: 1.55;
+/* ── FINAL CTA ─────────────────────────────────────────── */
+.cta-section {
+  background: radial-gradient(ellipse at center, var(--grape), var(--black) 80%);
+  padding: 6rem 6vw;
+  text-align: center;
 }
-
-/* ── DICE / SYSTEM ───────────────────────────────────────── */
-.system-row {
-  display: flex;
-  gap: 3rem;
-  align-items: flex-start;
-  margin-top: 3rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid rgba(201,168,76,0.1);
-}
-
-.dice-block {
-  flex: 1;
-}
-
-.dice-title {
+.cta-title {
   font-family: 'Cinzel', serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ice);
-  margin-bottom: 0.8rem;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+.cta-lead {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--cream);
+  max-width: 640px;
+  margin: 0 auto 2.5rem;
+  font-style: italic;
+  opacity: 0.95;
+}
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.dice-results {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+/* ── FOOTER ─────────────────────────────────────────────── */
+.footer {
+  background: var(--black);
+  border-top: 1px solid rgba(201,168,76,0.15);
+  padding: 3rem 6vw 2rem;
 }
-
-.dice-row {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.5rem 0.8rem;
-  border-radius: 4px;
+.footer-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 2.5rem;
+}
+.footer-brand-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.footer-brand-sub {
   font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+  max-width: 420px;
 }
-
-.dice-row.fail    { background: rgba(139,32,32,0.2); border-left: 3px solid #8B2020; color: #d97878; }
-.dice-row.partial { background: rgba(126,184,212,0.08); border-left: 3px solid var(--ice); color: var(--ice); }
-.dice-row.success { background: rgba(95,184,125,0.12); border-left: 3px solid #5fb87d; color: #5fb87d; }
-
-.dice-row strong { font-family: 'Cinzel', serif; letter-spacing: 0.05em; }
-
-.moral-block {
-  flex: 1;
+.footer-col-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
 }
-
-.moral-items {
+.footer-links {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-
-.moral-item {
-  padding: 0.6rem 0.9rem;
-  border-radius: 4px;
-  display: flex;
-  gap: 0.8rem;
-  align-items: flex-start;
+.footer-link {
+  font-size: 0.9rem;
+  color: var(--cream);
+  opacity: 0.8;
+  transition: color 0.18s ease, opacity 0.18s ease;
 }
-
-.moral-item.virtue   { background: rgba(126,184,212,0.08); border-left: 3px solid var(--ice); }
-.moral-item.tentacao { background: rgba(107,79,160,0.12);  border-left: 3px solid #9b59b6; }
-
-.moral-label {
-  font-family: 'Cinzel', serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  margin-top: 2px;
-}
-
-.moral-item.virtue   .moral-label { color: var(--ice); }
-.moral-item.tentacao .moral-label { color: #c39bd3; }
-
-.moral-desc {
-  font-size: 0.88rem;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-.endings-block {
-  flex: 1;
-}
-
-.endings-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-top: 0.2rem;
-}
-
-.ending-item {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.45rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  font-size: 0.88rem;
-}
-
-.ending-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.ending-item:nth-child(1) .ending-dot { background: var(--gold); }
-.ending-item:nth-child(2) .ending-dot { background: var(--ice); }
-.ending-item:nth-child(3) .ending-dot { background: #5fb87d; }
-.ending-item:nth-child(4) .ending-dot { background: #9b59b6; }
-.ending-item:nth-child(5) .ending-dot { background: #8B2020; }
-
-.ending-name { color: var(--cream); font-weight: 600; }
-.ending-type { color: var(--muted); font-size: 0.78rem; font-style: italic; }
-
-/* ── FOOTER ──────────────────────────────────────────────── */
-.footer {
-  background: var(--grape);
-  border-top: 1px solid rgba(201,168,76,0.2);
-  padding: 2.5rem 6vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-}
-
-.footer-quote {
-  font-style: italic;
-  font-size: 1.1rem;
-  color: var(--goldlt);
-  opacity: 0.85;
-  max-width: 480px;
-  line-height: 1.6;
-}
-
-.footer-quote cite {
-  display: block;
-  font-style: normal;
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 0.5rem;
-}
-
-.footer-meta {
-  text-align: right;
-}
-
-.footer-title {
-  font-family: 'Cinzel', serif;
-  font-size: 1rem;
-  color: var(--gold);
-  margin-bottom: 0.3rem;
-}
-
-.footer-info {
+.footer-link:hover { color: var(--gold); opacity: 1; }
+.footer-bottom {
+  max-width: 1320px;
+  margin: 2.5rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(201,168,76,0.1);
   font-size: 0.78rem;
   color: var(--muted);
-  line-height: 1.7;
+  text-align: center;
+  letter-spacing: 0.04em;
 }
 
-/* ── SNOW DECORATION ─────────────────────────────────────── */
-@keyframes snow-drift {
-  0%   { transform: translateY(-10px) translateX(0); opacity: 0; }
-  10%  { opacity: 0.6; }
-  90%  { opacity: 0.3; }
-  100% { transform: translateY(100vh) translateX(40px); opacity: 0; }
+/* ── RESPONSIVE ────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .pillars-grid,
+  .paths-flow,
+  .archetypes-grid { grid-template-columns: repeat(2, 1fr); }
+  .how-grid { grid-template-columns: repeat(2, 1fr); }
+  .how-item { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.12); }
+  .world-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .dice-strip { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
 }
-
-.snowflake {
-  position: fixed;
-  top: -10px;
-  width: 5px; height: 5px;
-  background: radial-gradient(circle, rgba(232,224,208,0.8) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  animation: snow-drift linear infinite;
-  z-index: 0;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   RESPONSIVIDADE MOBILE
-════════════════════════════════════════════════════════════ */
-
-/* ── TABLET (≤ 1024px) ────────────────────────────────── */
-@media (max-width: 1024px) {
-  .how-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-  }
-  .how-item:nth-child(3) { border-right: none; }
-  .how-item:nth-child(4) {
-    border-top: 1px solid rgba(201,168,76,0.1);
-    padding-top: 1.2rem;
-  }
-  .how-item:nth-child(5) {
-    border-top: 1px solid rgba(201,168,76,0.1);
-    padding-top: 1.2rem;
-  }
-
-  .system-row { gap: 1.8rem; }
-  .archetypes-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
-}
-
-/* ── MOBILE (≤ 768px) ─────────────────────────────────── */
-@media (max-width: 768px) {
-  /* Section padding */
-  .section { padding: 2.8rem 1.2rem; }
-
-  /* Hero */
-  .hero { height: 100svh; min-height: 480px; max-height: none; }
-  .hero-content {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0 1.2rem 2.5rem;
-    gap: 1.4rem;
-  }
-  .hero-divider { display: none; }
-  .hero-pitch { max-width: 100%; }
-  .hero-pitch-title { margin-top: 0.2rem; }
-  .hero-title { font-size: clamp(2.2rem, 10vw, 3.6rem); }
-  .hero-tagline { font-size: 1rem; max-width: 100%; }
-  .hero-badges { gap: 0.4rem; }
-
-  /* World */
-  .world-inner {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  .world-map-wrap { order: -1; }
-  .world-states { flex-direction: column; gap: 0; }
-  .state-item { border-left: 2px solid; border-top: none; }
-
-  /* Archetypes */
-  .archetypes-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  .arch-portrait { aspect-ratio: 3/4; }
-
-  /* How it works */
-  .how-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-  }
-  .how-item {
-    border-right: none;
-    border-bottom: 1px solid rgba(201,168,76,0.1);
-    padding: 1.2rem 0 1.2rem 0;
-  }
-  .how-item:nth-child(odd) { padding-right: 1rem; border-right: 1px solid rgba(201,168,76,0.1); }
-  .how-item:nth-child(3) { border-right: 1px solid rgba(201,168,76,0.1); }
-  .how-item:last-child { border-bottom: none; }
-  .how-item:nth-child(4) { border-top: none; padding-top: 1.2rem; }
-  .how-item:nth-child(5) { border-top: none; border-right: none; }
-
-  /* System row */
-  .system-row {
-    flex-direction: column;
-    gap: 2rem;
-    margin-top: 2rem;
-    padding-top: 2rem;
-  }
-
-  /* Footer */
-  .footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.4rem;
-    padding: 2rem 1.2rem;
-  }
-  .footer-meta { text-align: left; }
-}
-
-/* ── SMALL MOBILE (≤ 480px) ───────────────────────────── */
-@media (max-width: 480px) {
-  .hero-title { font-size: 2.2rem; }
-  .section-title { font-size: 1.5rem; }
-
-  .archetypes-grid { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
-
+@media (max-width: 640px) {
+  .section { padding: 4rem 1.2rem; }
+  .hero-inner { padding: 3.5rem 1.2rem 3rem; }
+  .pillars-grid,
+  .paths-flow,
+  .archetypes-grid,
   .how-grid { grid-template-columns: 1fr; }
-  .how-item { border-right: none !important; padding-right: 0 !important; border-bottom: 1px solid rgba(201,168,76,0.1); }
-  .how-item:last-child { border-bottom: none; }
-
-  .badge { font-size: 0.6rem; padding: 0.25rem 0.6rem; }
+  .footer-inner { grid-template-columns: 1fr; gap: 1.8rem; }
+  .btn-primary { padding: 0.95rem 1.8rem; font-size: 0.85rem; width: 100%; justify-content: center; }
+  .btn-secondary { width: 100%; justify-content: center; }
+  .hero-cta { flex-direction: column; width: 100%; align-items: stretch; }
 }
 </style>
 </head>
@@ -727,277 +733,424 @@ body {
 
 <!-- ═══ HERO ═══════════════════════════════════════════════ -->
 <section class="hero">
-  <img src="images/image_1.png" class="hero-img" alt="As Crônicas de Arandell">
+  <img src="images/image_1.png" class="hero-img" alt="Portal para Arandell" onerror="this.style.display='none'">
   <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <div class="hero-text">
-      <div class="hero-eyebrow">Uma experiência narrativa completa</div>
-      <div class="hero-title">As Crônicas<br>de Arandell</div>
-      <div class="hero-sub">O Inverno das Almas</div>
-      <div class="hero-tagline">Um reino congelado pela mágica de uma rainha. Quatro viajantes. Oito sessões para mudar o destino de um mundo.</div>
-      <div class="hero-badges">
-        <span class="badge">4 Jogadores</span>
-        <span class="badge">Sem Mestre</span>
-        <span class="badge">8 Sessões</span>
-        <span class="badge">5 Finais Possíveis</span>
-        <span class="badge">App Web</span>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Um RPG narrativo cooperativo</div>
+    <h1 class="hero-title">As Crônicas<br>de Arandell</h1>
+    <div class="hero-sub">O Inverno das Almas</div>
+    <p class="hero-tagline">Um reino congelado por uma rainha esquecida. Quatro estranhos atravessando um espelho. Oito sessões. Três caminhos irreversíveis. Nove finais possíveis — mas vocês só conhecerão os que merecerem.</p>
+    <div class="hero-badges">
+      <span class="badge">4 Jogadores</span>
+      <span class="badge">Sem Mestre</span>
+      <span class="badge">8 Sessões</span>
+      <span class="badge">3 Caminhos</span>
+      <span class="badge">9 Finais</span>
+    </div>
+    <div class="hero-cta">
+      <a href="arandell-rpg.html" class="btn-primary">Atravessar o Portal <span class="btn-arrow">→</span></a>
+      <a href="#como-funciona" class="btn-secondary">Conhecer o Sistema <span class="btn-arrow">↓</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STORY HOOK ═══════════════════════════════════════════ -->
+<section class="section story-section">
+  <div class="quote-block">
+    <p class="quote-text">
+      "O frio protege. É o calor que mata."
+    </p>
+    <p class="quote-text" style="font-size: 1rem; margin-top: 1.8rem; opacity: 0.88;">
+      Arandell era luz e primavera eterna — até que a Rainha Serafina fez um pacto sombrio para salvar um coração partido. O feitiço congelou o mundo. Criaturas viraram pedra. A esperança virou lenda. Em algum lugar da Floresta Proibida, um leão dourado aguarda em silêncio.<br><br>
+      Vocês chegam como estranhos, puxados por um espelho antigo numa mansão esquecida. Não sabem ainda: cada passo deixa marca. O que vocês se tornam aqui decide o que acontece com o mundo.
+    </p>
+    <div class="quote-attrib">— As Crônicas de Arandell</div>
+  </div>
+</section>
+
+<!-- ═══ OS 3 PILARES DO SISTEMA ═══════════════════════════ -->
+<section class="section pillars-section" id="como-funciona">
+  <div class="section-label">O Sistema</div>
+  <h2 class="section-title">Suas Escolhas <span>Fecham Portas</span></h2>
+  <div class="gold-rule"></div>
+  <p class="section-lead">Este não é um jogo em que você "escolhe o final" no último clique. Suas decisões acumulam identidade, movem o mundo e consolidam um caminho irreversível. Quando chega o fim, só existem os finais compatíveis com quem vocês se tornaram.</p>
+
+  <div class="pillars-grid">
+    <div class="pillar">
+      <span class="pillar-icon">🜂</span>
+      <h3 class="pillar-title">Eixos de Identidade</h3>
+      <p class="pillar-desc">Cada decisão move três eixos que medem <em>quem o grupo se torna</em>. Não é pontuação — é formação de caráter. Compaixão abre portas que Ambição fecha.</p>
+      <div class="pillar-axes">
+        <div class="axis-line">
+          <span class="axis-dot" style="background: var(--comp);"></span>
+          <span class="axis-name" style="color: var(--comp);">Compaixão</span>
+          <span class="axis-desc">salvar · perdoar · curar</span>
+        </div>
+        <div class="axis-line">
+          <span class="axis-dot" style="background: var(--amb);"></span>
+          <span class="axis-name" style="color: var(--amb);">Ambição</span>
+          <span class="axis-desc">poder · atalhos · ganho</span>
+        </div>
+        <div class="axis-line">
+          <span class="axis-dot" style="background: var(--vinc);"></span>
+          <span class="axis-name" style="color: var(--vinc);">Vínculo</span>
+          <span class="axis-desc">lealdade · laços · sacrifício</span>
+        </div>
       </div>
     </div>
 
-    <div class="hero-divider"></div>
+    <div class="pillar">
+      <span class="pillar-icon">🜁</span>
+      <h3 class="pillar-title">Estado do Mundo</h3>
+      <p class="pillar-desc">Arandell responde ao que vocês fazem. O feitiço não é imutável — ele reage. O mundo não é cenário: é um quarto personagem que testemunha e lembra.</p>
+      <div class="pillar-axes">
+        <div class="axis-line">
+          <span class="axis-dot" style="background: #e6a84c;"></span>
+          <span class="axis-name" style="color: #e6a84c;">Calor</span>
+          <span class="axis-desc">o inverno cede ou aprofunda</span>
+        </div>
+        <div class="axis-line">
+          <span class="axis-dot" style="background: #ffd76a;"></span>
+          <span class="axis-name" style="color: #ffd76a;">Esperança</span>
+          <span class="axis-desc">aliados resistem ou desistem</span>
+        </div>
+        <div class="axis-line">
+          <span class="axis-dot" style="background: #c44;"></span>
+          <span class="axis-name" style="color: #c44;">Controle da Rainha</span>
+          <span class="axis-desc">o domínio dela cresce ou rui</span>
+        </div>
+      </div>
+    </div>
 
-    <div class="hero-pitch">
-      <div class="hero-pitch-title">O que é este jogo</div>
-      <div class="pitch-item">
-        <div class="pitch-dot"></div>
-        <div class="pitch-text">RPG narrativo cooperativo — sem necessidade de mestre ou experiência prévia</div>
-      </div>
-      <div class="pitch-item">
-        <div class="pitch-dot"></div>
-        <div class="pitch-text">Sistema de votação: toda decisão é coletiva, ninguém joga sozinho</div>
-      </div>
-      <div class="pitch-item">
-        <div class="pitch-dot"></div>
-        <div class="pitch-text">Duas forças morais — Virtude e Tentação — moldam o mundo e o final</div>
-      </div>
-      <div class="pitch-item">
-        <div class="pitch-dot"></div>
-        <div class="pitch-text">Aplicativo web gerencia tudo: narrativa, dados, NPCs e evolução</div>
+    <div class="pillar">
+      <span class="pillar-icon">🜃</span>
+      <h3 class="pillar-title">O Caminho Irreversível</h3>
+      <p class="pillar-desc">Ao fim da <strong>Sessão 4</strong>, suas escolhas consolidam um caminho — e ele não pode mais mudar. Depois disso, vocês só verão finais compatíveis com quem se tornaram.</p>
+      <div class="pillar-axes">
+        <div class="axis-line">
+          <span class="axis-dot" style="background: var(--resist);"></span>
+          <span class="axis-name" style="color: var(--resist);">Resistência</span>
+          <span class="axis-desc">acesso ao Ancião · 3 finais</span>
+        </div>
+        <div class="axis-line">
+          <span class="axis-dot" style="background: var(--equil);"></span>
+          <span class="axis-name" style="color: var(--equil);">Equilíbrio</span>
+          <span class="axis-desc">trânsito com custo · 3 finais</span>
+        </div>
+        <div class="axis-line">
+          <span class="axis-dot" style="background: var(--corrup);"></span>
+          <span class="axis-name" style="color: var(--corrup);">Corrupção</span>
+          <span class="axis-desc">acesso à Rainha · 3 finais</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ WORLD ════════════════════════════════════════════════ -->
+<!-- ═══ WORLD ═══════════════════════════════════════════════ -->
 <section class="section world-section">
-  <div class="world-inner">
+  <div class="world-grid">
     <div class="world-map-wrap">
-      <img src="images/image_9.png" class="world-map-img" alt="Mapa de Arandell">
-      <div class="map-caption">Mapa do Reino de Arandell</div>
+      <img src="images/image_9.png" class="world-map-img" alt="Mapa de Arandell" onerror="this.style.display='none'">
+      <div class="map-caption">O Reino de Arandell</div>
     </div>
     <div>
       <div class="section-label">O Cenário</div>
-      <div class="section-title">O Reino de <span>Arandell</span></div>
+      <h2 class="section-title">Um Reino em <span>Pausa</span></h2>
       <div class="gold-rule"></div>
       <p class="world-desc">
-        Arandell era uma terra de luz, florestas vivas e primaveras eternas — até que a Rainha Serafina fez um pacto sombrio e congelou tudo. Décadas de inverno. Criaturas transformadas em pedra. Um leão dourado em algum lugar na floresta proibida, aguardando em silêncio.
+        Nove locais. Uma aldeia de faunos escondida entre raízes. Um castelo de cristal governado por uma rainha que sente saudades. Uma floresta onde as árvores lembram. Um leão dourado que raramente aparece — e nunca sem motivo.
       </p>
       <p class="world-desc">
-        Os jogadores chegam como estranhos — mas o destino de Arandell depende de cada escolha que fizerem. Cada decisão acumula Virtude ou Tentação. O mundo responde. O inverno sente.
+        Cada sessão leva vocês mais fundo. Cada NPC carrega história, feridas, segredos. <strong>Finn</strong> pode morrer se vocês priorizarem a aldeia. A aldeia pode arder se vocês priorizarem Finn. <strong>Beron</strong> pode virar aliado ou inimigo permanente — a escolha é sua, e ela não volta.
       </p>
-      <div class="world-states">
-        <div class="state-item">
-          <div class="state-name">❄ Inverno Eterno</div>
-          <div class="state-desc">Estado inicial. Neve constante, silêncio opressor.</div>
-        </div>
-        <div class="state-item">
-          <div class="state-name">⚖ Equilíbrio</div>
-          <div class="state-desc">O feitiço racha. Sinais de vida emergem.</div>
-        </div>
-        <div class="state-item">
-          <div class="state-name">🌸 Primavera</div>
-          <div class="state-desc">O inverno cede. O mundo respira de novo.</div>
-        </div>
-      </div>
+      <p class="world-desc" style="color: var(--muted); font-style: italic;">
+        Em Arandell, não existe pausa sem consequência. O mundo repara em quem fica calado.
+      </p>
     </div>
   </div>
 </section>
 
-<!-- ═══ ARCHETYPES ════════════════════════════════════════ -->
+<!-- ═══ ARCHETYPES ═══════════════════════════════════════════ -->
 <section class="section archetypes-section">
   <div class="section-label">Os Personagens</div>
-  <div class="section-title">Quatro Caminhos para o <span>Heroísmo</span></div>
-  <div class="gold-rule"></div>
+  <h2 class="section-title">Quatro Caminhos para o <span>Heroísmo</span></h2>
+  <div class="gold-rule" style="margin-left: auto; margin-right: auto;"></div>
+  <p class="section-lead" style="margin-left: auto; margin-right: auto; text-align: center;">
+    Cada jogador escolhe um arquétipo. Os atributos diferem, mas não há papel "melhor" — há papéis que contam histórias diferentes. Suas habilidades únicas são cruciais em momentos específicos.
+  </p>
 
   <div class="archetypes-grid">
-
     <div class="arch-card">
-      <img src="images/image_2.png" class="arch-portrait" alt="O Guardião">
+      <img src="images/image_2.png" class="arch-portrait" alt="O Guardião" onerror="this.style.display='none'">
       <div class="arch-body">
         <div class="arch-color-bar"></div>
         <div class="arch-name">O Guardião</div>
         <div class="arch-role">Protetor · Guerreiro</div>
         <div class="arch-desc">Nasceu para defender. Quando o perigo surge, coloca o corpo entre a ameaça e os aliados — sem hesitar.</div>
         <div class="arch-ability">⚡ Escudo Vivo</div>
-        <div class="arch-attr"><strong>Corpo 3</strong> · Mente 2 · Coração 2 · Espírito 2</div>
+        <div class="arch-attr"><strong>Corpo 3</strong> · Mente 2 · Coração 2 · Espírito 2 · 3◆ Destino</div>
       </div>
     </div>
 
     <div class="arch-card">
-      <img src="images/image_3.png" class="arch-portrait" alt="A Estudiosa">
+      <img src="images/image_3.png" class="arch-portrait" alt="A Estudiosa" onerror="this.style.display='none'">
       <div class="arch-body">
         <div class="arch-color-bar"></div>
         <div class="arch-name">A Estudiosa</div>
         <div class="arch-role">Sábia · Pesquisadora</div>
         <div class="arch-desc">Curiosidade personificada. O conhecimento é seu poder — e em Arandell, saber o suficiente pode salvar todos.</div>
         <div class="arch-ability">⚡ Memória Viva</div>
-        <div class="arch-attr">Corpo 1 · <strong>Mente 3</strong> · Coração 2 · <strong>Espírito 3</strong></div>
+        <div class="arch-attr">Corpo 1 · <strong>Mente 3</strong> · Coração 2 · <strong>Espírito 3</strong> · 2◆ Destino</div>
       </div>
     </div>
 
     <div class="arch-card">
-      <img src="images/image_4.png" class="arch-portrait" alt="O Curandeiro">
+      <img src="images/image_4.png" class="arch-portrait" alt="O Curandeiro" onerror="this.style.display='none'">
       <div class="arch-body">
         <div class="arch-color-bar"></div>
         <div class="arch-name">O Curandeiro</div>
         <div class="arch-role">Empático · Sanador</div>
         <div class="arch-desc">Sente a dor dos outros antes da própria. Sua magia não destrói — restaura o que o inverno tirou das pessoas.</div>
         <div class="arch-ability">⚡ Toque de Esperança</div>
-        <div class="arch-attr">Corpo 2 · Mente 2 · <strong>Coração 3</strong> · Espírito 2</div>
+        <div class="arch-attr">Corpo 2 · Mente 2 · <strong>Coração 3</strong> · Espírito 2 · 3◆ Destino</div>
       </div>
     </div>
 
     <div class="arch-card">
-      <img src="images/image_5.png" class="arch-portrait" alt="A Visionária">
+      <img src="images/image_5.png" class="arch-portrait" alt="A Visionária" onerror="this.style.display='none'">
       <div class="arch-body">
         <div class="arch-color-bar"></div>
         <div class="arch-name">A Visionária</div>
         <div class="arch-role">Mística · Clarividente</div>
         <div class="arch-desc">Percebe o que está além da realidade — futuros possíveis, verdades ocultas, o fio invisível que conecta tudo.</div>
         <div class="arch-ability">⚡ Sexto Sentido</div>
-        <div class="arch-attr">Corpo 1 · Mente 2 · Coração 2 · <strong>Espírito 4</strong></div>
+        <div class="arch-attr">Corpo 1 · Mente 2 · Coração 2 · <strong>Espírito 4</strong> · 4◆ Destino</div>
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- ═══ HOW IT WORKS ══════════════════════════════════════ -->
+<!-- ═══ CAMINHOS + FINAIS ═══════════════════════════════════ -->
+<section class="section paths-section">
+  <div class="section-label">A Estrutura Narrativa</div>
+  <h2 class="section-title">Três Caminhos. <span>Nove Finais.</span></h2>
+  <div class="gold-rule"></div>
+  <p class="section-lead">
+    Ao fim da Sessão 4, uma cena declarativa reconhece o que o grupo se tornou. A partir desse ponto, cada caminho desbloqueia seus próprios desdobramentos, bloqueia outros. Cada playthrough só vê 2–3 finais — nunca os 9.
+  </p>
+
+  <div class="paths-flow">
+    <div class="path-card resistencia path-resistencia">
+      <div class="path-header">
+        <span class="path-icon">✦</span>
+        <span class="path-name">Resistência</span>
+      </div>
+      <p class="path-intro">Compaixão e vínculo dominam. O Ancião se aproxima. As portas da corrupção se fecham. Vocês carregam peso — mas também clareza.</p>
+      <div class="path-endings">
+        <div class="ending-row">
+          <div>
+            <strong>Redenção Plena</strong>
+            <span>Primavera integral, sem perdas.</span>
+          </div>
+        </div>
+        <div class="ending-row">
+          <div>
+            <strong>Sacrifício Nobre</strong>
+            <span>Alguém se oferece — Arandell é salva.</span>
+          </div>
+        </div>
+        <div class="ending-row">
+          <div>
+            <strong>Vitória Frágil</strong>
+            <span>Vencem, mas sobre uma cicatriz.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="path-card equilibrio path-equilibrio">
+      <div class="path-header">
+        <span class="path-icon">◈</span>
+        <span class="path-name">Equilíbrio</span>
+      </div>
+      <p class="path-intro">Valores mistos. Vocês transitam entre lados, mas cada passo tem um preço. Segredos únicos se abrem — e outros se fecham.</p>
+      <div class="path-endings">
+        <div class="ending-row">
+          <div>
+            <strong>Equilíbrio Real</strong>
+            <span>Paz honesta. Arandell sobrevive transformada.</span>
+          </div>
+        </div>
+        <div class="ending-row">
+          <div>
+            <strong>Traição Silenciosa</strong>
+            <span>Manipularam todos — e ninguém percebeu.</span>
+          </div>
+        </div>
+        <div class="ending-row">
+          <div>
+            <strong>Fuga Estratégica</strong>
+            <span>Saem enquanto é possível. Arandell continua.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="path-card corrupcao path-corrupcao">
+      <div class="path-header">
+        <span class="path-icon">◆</span>
+        <span class="path-name">Corrupção</span>
+      </div>
+      <p class="path-intro">A ambição venceu. A Rainha os reconhece. O Ancião se afasta. Aliados podem morrer ou trair. Vocês já não são os mesmos.</p>
+      <div class="path-endings">
+        <div class="ending-row">
+          <div>
+            <strong>Novo Governante</strong>
+            <span>Assumem o trono. O inverno muda de dono.</span>
+          </div>
+        </div>
+        <div class="ending-row">
+          <div>
+            <strong>Queda Interna</strong>
+            <span>O poder custou tudo. Sobraram vocês e o trono.</span>
+          </div>
+        </div>
+        <div class="ending-row">
+          <div>
+            <strong>Domínio Frio</strong>
+            <span>Inverno eterno absoluto. Nenhuma primavera.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══════════════════════════════════════ -->
 <section class="section how-section">
-  <div class="section-label">Como Funciona</div>
-  <div class="section-title">Regras Simples, <span>Histórias Profundas</span></div>
+  <div class="section-label">O Ciclo de Cada Cena</div>
+  <h2 class="section-title">Regras Simples, <span>Histórias Profundas</span></h2>
   <div class="gold-rule"></div>
 
   <div class="how-grid">
     <div class="how-item">
       <div class="how-number">01</div>
       <div class="how-title">Narração</div>
-      <div class="how-desc">O app descreve o cenário com detalhes narrativos e apresenta a situação do grupo.</div>
+      <div class="how-desc">O app descreve o cenário, NPCs e situação. O mundo responde ao seu estado.</div>
     </div>
     <div class="how-item">
       <div class="how-number">02</div>
       <div class="how-title">Votação</div>
-      <div class="how-desc">Todos os jogadores votam na ação a ser tomada. Empate é resolvido no dado.</div>
+      <div class="how-desc">Os 4 jogadores votam na ação. Empate é resolvido no dado. Ninguém joga sozinho.</div>
     </div>
     <div class="how-item">
       <div class="how-number">03</div>
       <div class="how-title">Teste</div>
-      <div class="how-desc">Se a ação é arriscada, escolhem quem rola 2d6 + atributo. Aliados ajudam com +1 cada.</div>
+      <div class="how-desc">Se a ação é arriscada, um jogador rola 2d6 + atributo. Aliados ajudam.</div>
     </div>
     <div class="how-item">
       <div class="how-number">04</div>
-      <div class="how-title">Resultado</div>
-      <div class="how-desc">Sucesso, parcial ou falha — cada resultado muda a história de forma permanente.</div>
+      <div class="how-title">Consequência</div>
+      <div class="how-desc">Sucesso, parcial ou falha — cada um muda a história de forma permanente.</div>
     </div>
     <div class="how-item">
       <div class="how-number">05</div>
-      <div class="how-title">O Mundo</div>
-      <div class="how-desc">As consequências acumulam. Virtude e Tentação crescem. Arandell responde às escolhas.</div>
+      <div class="how-title">O Eco</div>
+      <div class="how-desc">Eixos se movem, flags disparam, o mundo registra. Nada é esquecido.</div>
     </div>
-  </div>
-
-  <div class="system-row">
-
-    <div class="dice-block">
-      <div class="dice-title">Sistema de Dados — 2d6 + Atributo</div>
-      <div class="dice-results">
-        <div class="dice-row fail">
-          <strong>≤ 6</strong> — Falha. A situação piora.
-        </div>
-        <div class="dice-row partial">
-          <strong>7–9</strong> — Sucesso parcial. Funciona, mas com custo.
-        </div>
-        <div class="dice-row success">
-          <strong>10+</strong> — Sucesso total. A ação funciona perfeitamente.
-        </div>
-      </div>
-    </div>
-
-    <div class="moral-block">
-      <div class="dice-title">As Duas Forças Morais</div>
-      <div class="moral-items">
-        <div class="moral-item virtue">
-          <div class="moral-label">Virtude</div>
-          <div class="moral-desc">Cresce com sacrifício, coragem e compaixão. Nível 4+ dá bônus em testes e desbloqueia finais heroicos.</div>
-        </div>
-        <div class="moral-item tentacao">
-          <div class="moral-label">Tentação</div>
-          <div class="moral-desc">Cresce ao aceitar ofertas da Rainha. Dá poder rápido — mas corrói. Nível 5 coloca o personagem à beira do abismo.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="endings-block">
-      <div class="dice-title">Os 5 Finais Possíveis</div>
-      <div class="endings-list">
-        <div class="ending-item">
-          <div class="ending-dot"></div>
-          <div>
-            <div class="ending-name">A Redenção</div>
-            <div class="ending-type">Virtude alta · Final heroico completo</div>
-          </div>
-        </div>
-        <div class="ending-item">
-          <div class="ending-dot"></div>
-          <div>
-            <div class="ending-name">O Sacrifício</div>
-            <div class="ending-type">Um herói morre · Primavera incompleta</div>
-          </div>
-        </div>
-        <div class="ending-item">
-          <div class="ending-dot"></div>
-          <div>
-            <div class="ending-name">O Equilíbrio</div>
-            <div class="ending-type">Virtude e Tentação equilibradas</div>
-          </div>
-        </div>
-        <div class="ending-item">
-          <div class="ending-dot"></div>
-          <div>
-            <div class="ending-name">A Corrupção</div>
-            <div class="ending-type">Tentação máxima · Herói vira vilão</div>
-          </div>
-        </div>
-        <div class="ending-item">
-          <div class="ending-dot"></div>
-          <div>
-            <div class="ending-name">O Fracasso</div>
-            <div class="ending-type">Inverno eterno · Fuga de Arandell</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </section>
 
-<!-- ═══ FOOTER ════════════════════════════════════════════ -->
-<footer class="footer">
-  <div class="footer-quote">
-    "Toda alma pode ser redimida, mas toda escolha tem um preço."
-    <cite>— As Crônicas de Arandell</cite>
-  </div>
-  <div class="footer-meta">
-    <div class="footer-title">As Crônicas de Arandell</div>
-    <div class="footer-info">
-      RPG Narrativo Cooperativo<br>
-      4 jogadores · Sem mestre · 8 sessões<br>
-      Aplicativo web incluso · 2026
+<!-- ═══ DICE ═══════════════════════════════════════════════ -->
+<section class="section dice-section">
+  <div class="section-label">Sistema de Dados</div>
+  <h2 class="section-title"><span>2d6</span> + Atributo</h2>
+  <div class="gold-rule"></div>
+  <p class="section-lead">Quando uma ação tem risco, os dados decidem. Modificadores vêm do estado físico, ajudantes e uso estratégico de Virtude/Tentação como recurso.</p>
+
+  <div class="dice-strip">
+    <div class="dice-card fail">
+      <div class="dice-roll">≤ 6</div>
+      <div class="dice-label">Falha</div>
+      <div class="dice-desc">A ação falha, e a situação geralmente piora. Mas falhar não é o fim — é quando a história se torna interessante.</div>
     </div>
+    <div class="dice-card partial">
+      <div class="dice-roll">7–9</div>
+      <div class="dice-label">Sucesso Parcial</div>
+      <div class="dice-desc">Funciona, mas com custo. Tempo, recurso, relação, ou algo que vocês só percebem depois.</div>
+    </div>
+    <div class="dice-card success">
+      <div class="dice-roll">10+</div>
+      <div class="dice-label">Sucesso Total</div>
+      <div class="dice-desc">A ação sai exatamente como esperavam — às vezes até melhor. Nem tudo precisa doer.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINAL CTA ═══════════════════════════════════════════ -->
+<section class="cta-section">
+  <h2 class="cta-title">O Portal Aguarda</h2>
+  <p class="cta-lead">
+    Arandell esperou muito tempo. Escolham um espelho. Atravessem juntos. Nada do que fizerem passará sem ser notado.
+  </p>
+  <div class="cta-buttons">
+    <a href="arandell-rpg.html" class="btn-primary">Iniciar a Jornada <span class="btn-arrow">→</span></a>
+    <a href="arandell-rpg.html#tutorial" class="btn-secondary">Ver o Tutorial <span class="btn-arrow">→</span></a>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-title">As Crônicas de Arandell</div>
+      <div class="footer-brand-sub">
+        Um RPG narrativo cooperativo para 4 jogadores, sem necessidade de mestre. 8 sessões, 3 caminhos irreversíveis, 9 finais possíveis, e um mundo que lembra cada escolha.
+      </div>
+      <div class="hero-badges" style="margin: 0;">
+        <span class="badge">RPG Narrativo</span>
+        <span class="badge">Cooperativo</span>
+        <span class="badge">App Web</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Jogar</div>
+      <div class="footer-links">
+        <a href="arandell-rpg.html" class="footer-link">→ Iniciar a Jornada</a>
+        <a href="arandell-rpg.html#tutorial" class="footer-link">→ Tutorial Guiado</a>
+        <a href="arandell-apresentacao.html" class="footer-link">→ Apresentação Completa</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Material de Apoio</div>
+      <div class="footer-links">
+        <a href="referencia-rapida.html" class="footer-link">→ Referência Rápida</a>
+        <a href="fichas-personagem.html" class="footer-link">→ Fichas de Personagem</a>
+        <a href="cards-npcs.html" class="footer-link">→ Cards de NPCs</a>
+        <a href="mapa-arandell.html" class="footer-link">→ Mapa de Arandell</a>
+        <a href="FLUXO_JOGO.md" class="footer-link">→ Fluxo do Jogo</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    "Toda alma pode ser redimida — mas toda escolha tem um preço."
   </div>
 </footer>
 
 <script>
-// Snow particles
-const snowContainer = document.body;
-for (let i = 0; i < 18; i++) {
+// Partículas de neve — ambiente
+for (let i = 0; i < 20; i++) {
   const s = document.createElement('div');
   s.className = 'snowflake';
   s.style.left = Math.random() * 100 + 'vw';
-  s.style.animationDuration = (8 + Math.random() * 12) + 's';
-  s.style.animationDelay = (Math.random() * 10) + 's';
-  s.style.width = s.style.height = (3 + Math.random() * 5) + 'px';
-  s.style.opacity = 0.3 + Math.random() * 0.5;
+  s.style.animationDuration = (8 + Math.random() * 14) + 's';
+  s.style.animationDelay = (Math.random() * 12) + 's';
+  const size = (3 + Math.random() * 5);
+  s.style.width = s.style.height = size + 'px';
+  s.style.opacity = 0.25 + Math.random() * 0.45;
   document.body.appendChild(s);
 }
 </script>
