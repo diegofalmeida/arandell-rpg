@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fichas de Personagem — As Crônicas de Arandell</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #e8e4dc; font-family: 'Inter', sans-serif; padding: 1.5rem; }
+
+.selector { display: flex; gap: .5rem; justify-content: center; margin-bottom: 1.2rem; flex-wrap: wrap; }
+.sel-btn { font-family: 'Cinzel', serif; font-size: .72rem; letter-spacing: .08em; padding: .35rem .9rem; border: 1.5px solid #999; background: white; color: #333; cursor: pointer; border-radius: 3px; transition: all .15s; }
+.sel-btn:hover { border-color: #444; }
+.sel-btn.active { background: #2a2a2a; color: white; border-color: #2a2a2a; }
+
+/* Folha A4 retrato = 2 fichas A5 paisagem empilhadas */
+.sheet { width: 210mm; background: white; margin: 0 auto 1.5rem; border: 1px solid #ccc; display: none; flex-direction: column; }
+.sheet.visible { display: flex; }
+
+@media screen { .sheet { box-shadow: 0 2px 12px rgba(0,0,0,.1); } }
+@media print {
+  body { background: white; padding: 0; }
+  .selector { display: none; }
+  .sheet { display: flex !important; border: none; margin: 0; width: 100%; page-break-after: always; }
+  @page { size: A4 portrait; margin: 7mm; }
+}
+
+.divider { border: none; border-top: 1px dashed #ccc; flex-shrink: 0; }
+
+/* Cada ficha = metade do A4 = A5 paisagem */
+.ficha { width: 100%; min-height: 142mm; background: white; display: flex; flex-direction: column; font-size: 7.5pt; page-break-inside: avoid; flex: 1; }
+
+/* Cabeçalho */
+.hdr { display: flex; align-items: stretch; border-bottom: 1.5px solid #ddd; flex-shrink: 0; }
+.hdr-bar { width: 6px; flex-shrink: 0; }
+.hdr-content { flex: 1; padding: .38rem .72rem .32rem; display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.arch-name { font-family: 'Cinzel', serif; font-size: 12.5pt; font-weight: 700; line-height: 1; letter-spacing: .03em; }
+.arch-sub { font-family: 'Crimson Text', serif; font-size: 7.5pt; color: #666; font-style: italic; flex: 1; min-width: 0; }
+.hdr-game { font-family: 'Cinzel', serif; font-size: 5pt; letter-spacing: .18em; text-transform: uppercase; color: #bbb; white-space: nowrap; align-self: flex-end; }
+
+/* Corpo */
+.body { display: flex; flex: 1; }
+
+/* Coluna esquerda */
+.col-l { width: 79mm; flex-shrink: 0; border-right: 1px solid #ebebeb; padding: .45rem .68rem; display: flex; flex-direction: column; gap: .4rem; }
+.sec { font-family: 'Cinzel', serif; font-size: 5.5pt; letter-spacing: .22em; text-transform: uppercase; color: #aaa; padding-bottom: .1rem; border-bottom: .5px solid #efefef; margin-bottom: .15rem; }
+
+/* Atributos */
+.attrs { display: grid; grid-template-columns: 1fr 1fr; gap: .26rem; }
+.attr { border: 1px solid #e0e0e0; border-radius: 3px; padding: .26rem .38rem; display: flex; align-items: center; gap: .38rem; }
+.attr.hi { border-width: 1.5px; }
+.attr-val { font-family: 'Cinzel', serif; font-size: 14pt; font-weight: 700; line-height: 1; min-width: 17px; text-align: center; color: #bbb; }
+.attr.hi .attr-val { color: inherit; }
+.attr-name { font-family: 'Cinzel', serif; font-size: 6.5pt; font-weight: 600; letter-spacing: .03em; display: block; color: #1a1620; }
+.attr-hint { font-family: 'Crimson Text', serif; font-size: 6pt; color: #aaa; display: block; line-height: 1.2; }
+
+/* Habilidade */
+.skill { border: 1px solid #e0e0e0; border-radius: 3px; padding: .32rem .48rem; background: #fafafa; }
+.skill-lbl { font-family: 'Cinzel', serif; font-size: 5pt; letter-spacing: .18em; text-transform: uppercase; color: #bbb; margin-bottom: .06rem; }
+.skill-name { font-family: 'Cinzel', serif; font-size: 7.5pt; font-weight: 700; margin-bottom: .08rem; }
+.skill-txt { font-family: 'Crimson Text', serif; font-size: 7pt; color: #555; line-height: 1.38; }
+
+/* Sessão / Notas */
+.sess-row { display: flex; align-items: center; gap: .38rem; font-family: 'Cinzel', serif; font-size: 5.5pt; color: #bbb; letter-spacing: .08em; }
+.sess-ln { flex: 1; border-bottom: 1px solid #e0e0e0; }
+.notes { flex: 1; }
+.note-ln { border-bottom: .75px solid #ebebeb; height: 11.5px; margin-bottom: 1px; }
+
+/* Coluna direita */
+.col-r { flex: 1; padding: .45rem .68rem; display: flex; flex-direction: column; gap: .4rem; }
+
+/* Trackers */
+.trackers { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+.circles { display: flex; gap: .26rem; margin-top: .15rem; }
+.circ { width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid; cursor: pointer; flex-shrink: 0; transition: background .12s; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.circ.v { border-color: #2A6B3A; } .circ.v.on { background: #2A6B3A; }
+.circ.t { border-color: #8B2020; } .circ.t.on { background: #8B2020; }
+
+/* Estado */
+.estados { display: flex; gap: .75rem; align-items: center; }
+.est { display: flex; align-items: center; gap: .2rem; cursor: pointer; }
+.est-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.2px solid #ccc; flex-shrink: 0; transition: all .12s; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.est.on .est-dot { background: #2a2a2a; border-color: #2a2a2a; }
+.est-lbl { font-family: 'Crimson Text', serif; font-size: 7.5pt; color: #666; }
+
+/* Pontos de Destino */
+.stars { display: flex; gap: .2rem; margin-top: .1rem; }
+.star { font-size: 12pt; line-height: 1; cursor: pointer; color: #e0e0e0; transition: color .12s; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.star.on { color: #8a7230; }
+
+/* Flags */
+.flags { display: grid; grid-template-columns: 1fr 1fr; gap: .13rem .75rem; flex: 1; }
+.flag { display: flex; align-items: center; gap: .26rem; cursor: pointer; }
+.fbox { width: 9px; height: 9px; border: 1.2px solid #ccc; border-radius: 1.5px; flex-shrink: 0; position: relative; transition: all .12s; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.flag.on .fbox { background: #2a2a2a; border-color: #2a2a2a; }
+.flag.on .fbox::after { content: '✓'; position: absolute; top: -1px; left: .5px; font-size: 6.5px; color: white; line-height: 9px; }
+.ftxt { font-family: 'Inter', sans-serif; font-size: 5.8pt; color: #777; }
+
+/* Rodapé */
+.ftr { border-top: .75px solid #f0f0f0; padding: .18rem .72rem; display: flex; justify-content: space-between; flex-shrink: 0; }
+.ftr-txt { font-family: 'Cinzel', serif; font-size: 5pt; letter-spacing: .14em; color: #ccc; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="selector">
+  <button class="sel-btn active" onclick="show('all',this)">Todas (2 por página)</button>
+  <button class="sel-btn" onclick="show('p1',this)">Pág 1 — Guardião + Estudiosa</button>
+  <button class="sel-btn" onclick="show('p2',this)">Pág 2 — Curandeiro + Visionária</button>
+</div>
+
+
+<!-- ═══ PÁGINA 1: Guardião + Estudiosa ═══ -->
+<div class="sheet visible" id="p1">
+  <div class="ficha">
+    <div class="hdr">
+      <div class="hdr-bar" style="background:#9B2B2B"></div>
+      <div class="hdr-content">
+        <span class="arch-name" style="color:#9B2B2B">O Guardião</span>
+        <span class="arch-sub">Nasceu para defender. Age antes de pensar — porque pensar custa tempo que alguém não tem.</span>
+        <span class="hdr-game">As Crônicas de Arandell</span>
+      </div>
+    </div>
+    <div class="body">
+      <div class="col-l">
+      <div>
+        <div class="sec">Atributos</div>
+        <div class="attrs"><div class="attr hi" style="border-color:#9B2B2B"><div class="attr-val" style="color:#9B2B2B">4</div><div><span class="attr-name">Corpo</span><span class="attr-hint">Força e resistência</span></div></div><div class="attr"><div class="attr-val">2</div><div><span class="attr-name">Mente</span><span class="attr-hint">Análise e estratégia</span></div></div><div class="attr"><div class="attr-val">2</div><div><span class="attr-name">Coração</span><span class="attr-hint">Empatia e conexões</span></div></div><div class="attr"><div class="attr-val">2</div><div><span class="attr-name">Espírito</span><span class="attr-hint">Fé e resistência moral</span></div></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-lbl">Habilidade Especial</div>
+        <div class="skill-name" style="color:#9B2B2B">Escudo Vivo</div>
+        <div class="skill-txt">Uma vez por sessão, absorve todo o dano de um teste para proteger um companheiro. Recebe as consequências no lugar do aliado.</div>
+      </div>
+      <div class="sess-row"><span>Sessão</span><div class="sess-ln"></div><span>___ / 8</span></div>
+      <div class="notes">
+        <div class="sec">Notas</div>
+        <div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div>
+      </div>
+    </div>
+      <div class="col-r">
+      <div class="trackers">
+        <div>
+          <div class="sec">Virtude <span style="color:#2A6B3A">●</span></div>
+          <div class="circles"><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div></div>
+        </div>
+        <div>
+          <div class="sec">Tentação <span style="color:#8B2020">●</span></div>
+          <div class="circles"><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Estado</div>
+        <div class="estados">
+          <div class="est on" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Bem</span></div>
+          <div class="est" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Abalado</span></div>
+          <div class="est" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Crítico</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Pontos de Destino <span style="color:#8a7230;font-size:7pt">★★★</span></div>
+        <div class="stars"><span class="star on" onclick="togS(this)">★</span><span class="star on" onclick="togS(this)">★</span><span class="star on" onclick="togS(this)">★</span><span class="star" onclick="togS(this)">★</span></div>
+      </div>
+      <div style="flex:1">
+        <div class="sec">Flags Narrativas</div>
+        <div class="flags"><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">ajudou_finn</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">thalen_aliado</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">aceita_convite_rainha</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">beron_sacrificio</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">perdoou_beron</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">nessa_viva</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">encontrou_anciao</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">salvou_aldeia</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">fez_sacrificio</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">rejeitou_rainha</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">completou_provas</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">aliou_lira</span></div></div>
+      </div>
+    </div>
+    </div>
+    <div class="ftr">
+      <span class="ftr-txt">As Crônicas de Arandell: O Inverno das Almas</span>
+      <span class="ftr-txt">2d6 + Atributo · 6— Falha · 7–9 Parcial · 10+ Sucesso</span>
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="ficha">
+    <div class="hdr">
+      <div class="hdr-bar" style="background:#3B7EA1"></div>
+      <div class="hdr-content">
+        <span class="arch-name" style="color:#3B7EA1">A Estudiosa</span>
+        <span class="arch-sub">Leu sobre mundos como este. Conhece histórias antigas. Mas nunca esperava existir dentro de uma.</span>
+        <span class="hdr-game">As Crônicas de Arandell</span>
+      </div>
+    </div>
+    <div class="body">
+      <div class="col-l">
+      <div>
+        <div class="sec">Atributos</div>
+        <div class="attrs"><div class="attr"><div class="attr-val">1</div><div><span class="attr-name">Corpo</span><span class="attr-hint">Força e resistência</span></div></div><div class="attr hi" style="border-color:#3B7EA1"><div class="attr-val" style="color:#3B7EA1">4</div><div><span class="attr-name">Mente</span><span class="attr-hint">Análise e estratégia</span></div></div><div class="attr"><div class="attr-val">3</div><div><span class="attr-name">Coração</span><span class="attr-hint">Empatia e conexões</span></div></div><div class="attr"><div class="attr-val">2</div><div><span class="attr-name">Espírito</span><span class="attr-hint">Fé e resistência moral</span></div></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-lbl">Habilidade Especial</div>
+        <div class="skill-name" style="color:#3B7EA1">Memória Viva</div>
+        <div class="skill-txt">Uma vez por cena, testa Mente para recuperar informação útil sobre o mundo, criaturas ou feitiços — como se já tivesse lido sobre aquilo.</div>
+      </div>
+      <div class="sess-row"><span>Sessão</span><div class="sess-ln"></div><span>___ / 8</span></div>
+      <div class="notes">
+        <div class="sec">Notas</div>
+        <div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div>
+      </div>
+    </div>
+      <div class="col-r">
+      <div class="trackers">
+        <div>
+          <div class="sec">Virtude <span style="color:#2A6B3A">●</span></div>
+          <div class="circles"><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div></div>
+        </div>
+        <div>
+          <div class="sec">Tentação <span style="color:#8B2020">●</span></div>
+          <div class="circles"><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Estado</div>
+        <div class="estados">
+          <div class="est on" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Bem</span></div>
+          <div class="est" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Abalada</span></div>
+          <div class="est" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Crítico</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Pontos de Destino <span style="color:#8a7230;font-size:7pt">★★</span></div>
+        <div class="stars"><span class="star on" onclick="togS(this)">★</span><span class="star on" onclick="togS(this)">★</span><span class="star" onclick="togS(this)">★</span><span class="star" onclick="togS(this)">★</span></div>
+      </div>
+      <div style="flex:1">
+        <div class="sec">Flags Narrativas</div>
+        <div class="flags"><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">ajudou_finn</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">thalen_aliado</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">aceita_convite_rainha</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">beron_sacrificio</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">perdoou_beron</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">nessa_viva</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">encontrou_anciao</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">salvou_aldeia</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">fez_sacrificio</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">rejeitou_rainha</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">completou_provas</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">aliou_lira</span></div></div>
+      </div>
+    </div>
+    </div>
+    <div class="ftr">
+      <span class="ftr-txt">As Crônicas de Arandell: O Inverno das Almas</span>
+      <span class="ftr-txt">2d6 + Atributo · 6— Falha · 7–9 Parcial · 10+ Sucesso</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PÁGINA 2: Curandeiro + Visionária ═══ -->
+<div class="sheet" id="p2">
+  <div class="ficha">
+    <div class="hdr">
+      <div class="hdr-bar" style="background:#2A6B3A"></div>
+      <div class="hdr-content">
+        <span class="arch-name" style="color:#2A6B3A">O Curandeiro</span>
+        <span class="arch-sub">Sente o que os outros sentem. Em Arandell, isso é raro — e extremamente valioso.</span>
+        <span class="hdr-game">As Crônicas de Arandell</span>
+      </div>
+    </div>
+    <div class="body">
+      <div class="col-l">
+      <div>
+        <div class="sec">Atributos</div>
+        <div class="attrs"><div class="attr"><div class="attr-val">2</div><div><span class="attr-name">Corpo</span><span class="attr-hint">Força e resistência</span></div></div><div class="attr"><div class="attr-val">2</div><div><span class="attr-name">Mente</span><span class="attr-hint">Análise e estratégia</span></div></div><div class="attr hi" style="border-color:#2A6B3A"><div class="attr-val" style="color:#2A6B3A">4</div><div><span class="attr-name">Coração</span><span class="attr-hint">Empatia e conexões</span></div></div><div class="attr"><div class="attr-val">3</div><div><span class="attr-name">Espírito</span><span class="attr-hint">Fé e resistência moral</span></div></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-lbl">Habilidade Especial</div>
+        <div class="skill-name" style="color:#2A6B3A">Toque de Esperança</div>
+        <div class="skill-txt">Uma vez por cena, melhora o estado de um aliado (Crítico→Abalado→Bem). Também pode remover 1 ponto de Tentação de outro personagem.</div>
+      </div>
+      <div class="sess-row"><span>Sessão</span><div class="sess-ln"></div><span>___ / 8</span></div>
+      <div class="notes">
+        <div class="sec">Notas</div>
+        <div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div>
+      </div>
+    </div>
+      <div class="col-r">
+      <div class="trackers">
+        <div>
+          <div class="sec">Virtude <span style="color:#2A6B3A">●</span></div>
+          <div class="circles"><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div></div>
+        </div>
+        <div>
+          <div class="sec">Tentação <span style="color:#8B2020">●</span></div>
+          <div class="circles"><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Estado</div>
+        <div class="estados">
+          <div class="est on" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Bem</span></div>
+          <div class="est" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Abalado</span></div>
+          <div class="est" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Crítico</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Pontos de Destino <span style="color:#8a7230;font-size:7pt">★★★</span></div>
+        <div class="stars"><span class="star on" onclick="togS(this)">★</span><span class="star on" onclick="togS(this)">★</span><span class="star on" onclick="togS(this)">★</span><span class="star" onclick="togS(this)">★</span></div>
+      </div>
+      <div style="flex:1">
+        <div class="sec">Flags Narrativas</div>
+        <div class="flags"><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">ajudou_finn</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">thalen_aliado</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">aceita_convite_rainha</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">beron_sacrificio</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">perdoou_beron</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">nessa_viva</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">encontrou_anciao</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">salvou_aldeia</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">fez_sacrificio</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">rejeitou_rainha</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">completou_provas</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">aliou_lira</span></div></div>
+      </div>
+    </div>
+    </div>
+    <div class="ftr">
+      <span class="ftr-txt">As Crônicas de Arandell: O Inverno das Almas</span>
+      <span class="ftr-txt">2d6 + Atributo · 6— Falha · 7–9 Parcial · 10+ Sucesso</span>
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="ficha">
+    <div class="hdr">
+      <div class="hdr-bar" style="background:#7a6933"></div>
+      <div class="hdr-content">
+        <span class="arch-name" style="color:#7a6933">A Visionária</span>
+        <span class="arch-sub">Sente o invisível. Ouve o inaudível. Às vezes é uma bênção. Às vezes, uma maldição.</span>
+        <span class="hdr-game">As Crônicas de Arandell</span>
+      </div>
+    </div>
+    <div class="body">
+      <div class="col-l">
+      <div>
+        <div class="sec">Atributos</div>
+        <div class="attrs"><div class="attr"><div class="attr-val">1</div><div><span class="attr-name">Corpo</span><span class="attr-hint">Força e resistência</span></div></div><div class="attr"><div class="attr-val">2</div><div><span class="attr-name">Mente</span><span class="attr-hint">Análise e estratégia</span></div></div><div class="attr"><div class="attr-val">2</div><div><span class="attr-name">Coração</span><span class="attr-hint">Empatia e conexões</span></div></div><div class="attr hi" style="border-color:#7a6933"><div class="attr-val" style="color:#7a6933">4</div><div><span class="attr-name">Espírito</span><span class="attr-hint">Fé e resistência moral</span></div></div></div>
+      </div>
+      <div class="skill">
+        <div class="skill-lbl">Habilidade Especial</div>
+        <div class="skill-name" style="color:#7a6933">Sexto Sentido</div>
+        <div class="skill-txt">Uma vez por cena, testa Espírito para perceber perigos ocultos, intenções verdadeiras ou segredos que nenhum outro personagem conseguiria detectar.</div>
+      </div>
+      <div class="sess-row"><span>Sessão</span><div class="sess-ln"></div><span>___ / 8</span></div>
+      <div class="notes">
+        <div class="sec">Notas</div>
+        <div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div><div class="note-ln"></div>
+      </div>
+    </div>
+      <div class="col-r">
+      <div class="trackers">
+        <div>
+          <div class="sec">Virtude <span style="color:#2A6B3A">●</span></div>
+          <div class="circles"><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div><div class="circ v" onclick="tog(this)"></div></div>
+        </div>
+        <div>
+          <div class="sec">Tentação <span style="color:#8B2020">●</span></div>
+          <div class="circles"><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div><div class="circ t" onclick="tog(this)"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Estado</div>
+        <div class="estados">
+          <div class="est on" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Bem</span></div>
+          <div class="est" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Abalada</span></div>
+          <div class="est" onclick="setEst(this)"><div class="est-dot"></div><span class="est-lbl">Crítico</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Pontos de Destino <span style="color:#8a7230;font-size:7pt">★★★★</span></div>
+        <div class="stars"><span class="star on" onclick="togS(this)">★</span><span class="star on" onclick="togS(this)">★</span><span class="star on" onclick="togS(this)">★</span><span class="star on" onclick="togS(this)">★</span></div>
+      </div>
+      <div style="flex:1">
+        <div class="sec">Flags Narrativas</div>
+        <div class="flags"><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">ajudou_finn</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">thalen_aliado</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">aceita_convite_rainha</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">beron_sacrificio</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">perdoou_beron</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">nessa_viva</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">encontrou_anciao</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">salvou_aldeia</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">fez_sacrificio</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">rejeitou_rainha</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">completou_provas</span></div><div class="flag" onclick="togF(this)"><div class="fbox"></div><span class="ftxt">aliou_lira</span></div></div>
+      </div>
+    </div>
+    </div>
+    <div class="ftr">
+      <span class="ftr-txt">As Crônicas de Arandell: O Inverno das Almas</span>
+      <span class="ftr-txt">2d6 + Atributo · 6— Falha · 7–9 Parcial · 10+ Sucesso</span>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(which, btn) {
+  document.querySelectorAll('.sheet').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.sel-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (which === 'all') document.querySelectorAll('.sheet').forEach(s => s.classList.add('visible'));
+  else document.getElementById(which).classList.add('visible');
+}
+function tog(el) { el.classList.toggle('on'); }
+function togS(el) { el.classList.toggle('on'); }
+function togF(el) { el.classList.toggle('on'); }
+function setEst(el) {
+  el.closest('.estados').querySelectorAll('.est').forEach(e => e.classList.remove('on'));
+  el.classList.add('on');
+}
+</script>
+</body>
+</html>
